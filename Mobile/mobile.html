@@ -1,484 +1,426 @@
-<div style="width: 100%; height: 100%; padding-left: 20px; padding-right: 12px; box-shadow: 0px -1px 0px black inset; overflow: hidden; justify-content: space-between; align-items: center; display: inline-flex">
-    <div style="width: 48px; height: 48px; justify-content: center; align-items: center; gap: 10px; display: flex">
-        <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-            <div style="width: 11.31px; height: 11.31px; left: 6.29px; top: 6.34px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Website - Mobile</title>
+    <link rel="stylesheet" href="desktop.css"> <!-- Assuming desktop.css now contains mobile styles via @media queries -->
+    <!-- Or link to a separate mobile.css: <link rel="stylesheet" href="mobile.css"> -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=BioRhyme&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+<header class="navbar">
+    <div class="nav-brand"> <!-- Simple brand name for mobile -->
+        <a href="#top" id="home-brand">Ky</a>
     </div>
-</div>
-<div style="width: 100%; height: 100%; padding-top: 16px; padding-left: 20px; padding-right: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-    <div style="align-self: stretch; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-        <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; display: inline-flex">
-            <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Home Page</div>
-        </div>
-        <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-            <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Music Store</div>
-        </div>
-        <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; display: inline-flex">
-            <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Tour Dates</div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-            <div style="align-self: stretch; padding-top: 24px; padding-bottom: 24px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-                <div style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 32px; display: inline-flex">
-                    <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                        <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 600; line-height: 21px; word-wrap: break-word">Latest Posts</div>
-                        <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                            <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">New Releases</div>
-                            <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Behind Scenes</div>
-                            <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Fan Stories</div>
-                            <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Upcoming Events</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <button class="nav-toggle" aria-label="toggle navigation" aria-expanded="false" aria-controls="nav-menu-mobile">
+        <span class="hamburger-icon"></span>
+    </button>
+    <div class="nav-menu-container"> <!-- Wrapper for the menu -->
+        <nav class="nav-menu" id="nav-menu-mobile">
+            <a href="#top" class="nav-link" id="home">Home Page</a>
+            <a href="#" class="nav-link disabled" id="music-store" onclick="alert('Music Store coming soon!')">Music Store</a>
+            <a href="#" class="nav-link disabled" id="tour-dates" onclick="alert('Tour Dates coming soon!')">Tour Dates</a>
+            <a href="https://linktr.ee/kytheonlyone" target="_blank" class="nav-link btn btn-secondary btn-small" id="stream-mobile">Stream</a>
+        </nav>
     </div>
-    <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 16px; display: flex">
-        <div data-alternate="False" data-icon-position="No icon" data-small="True" data-style="Secondary" style="align-self: stretch; padding-left: 10px; padding-right: 10px; padding-top: 4px; padding-bottom: 4px; border-radius: 6px; outline: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-            <div style="color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 500; line-height: 24px; word-wrap: break-word">Subscribe</div>
-        </div>
+    <div class="nav-right-desktop"> <!-- Kept for desktop, hidden on mobile by CSS -->
+        <a href="https://linktr.ee/kytheonlyone" target="_blank" class="btn btn-secondary btn-small" id="stream">Stream</a>
     </div>
-</div>
-<div style="width: 100%; height: 100%; padding-bottom: 96px; background: var(--Color-Scheme-1-Background, white); overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: center; display: inline-flex">
-    <div style="align-self: stretch; height: 64px; padding-left: 20px; padding-right: 12px; box-shadow: 0px -1px 0px black inset; overflow: hidden; justify-content: space-between; align-items: center; display: inline-flex">
-        <div style="width: 48px; height: 48px; justify-content: center; align-items: center; gap: 10px; display: flex">
-            <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                <div style="width: 11.31px; height: 11.31px; left: 6.29px; top: 6.34px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-            </div>
-        </div>
-    </div>
-    <div style="align-self: stretch; padding-top: 16px; padding-left: 20px; padding-right: 20px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-        <div style="align-self: stretch; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: center; display: flex">
-            <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; display: inline-flex">
-                <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Home Page</div>
-            </div>
-            <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; gap: 10px; display: inline-flex">
-                <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Music Store</div>
-            </div>
-            <div style="align-self: stretch; padding-top: 12px; padding-bottom: 12px; justify-content: flex-start; align-items: center; display: inline-flex">
-                <div style="color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: IBM Plex Sans; font-weight: 400; line-height: 27px; word-wrap: break-word">Tour Dates</div>
-            </div>
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-                <div style="align-self: stretch; padding-top: 24px; padding-bottom: 24px; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-                    <div style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 32px; display: inline-flex">
-                        <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: inline-flex">
-                            <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 600; line-height: 21px; word-wrap: break-word">Latest Posts</div>
-                            <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                                <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">New Releases</div>
-                                <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Behind Scenes</div>
-                                <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Fan Stories</div>
-                                <div style="width: 335px; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Upcoming Events</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: center; align-items: center; gap: 16px; display: flex">
-            <div data-alternate="False" data-icon-position="No icon" data-small="True" data-style="Secondary" style="align-self: stretch; padding-left: 10px; padding-right: 10px; padding-top: 4px; padding-bottom: 4px; border-radius: 6px; outline: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                <div style="color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 500; line-height: 24px; word-wrap: break-word">Subscribe</div>
-            </div>
-        </div>
-    </div>
-</div>
-<div style="width: 100%; height: 100%; padding-left: 20px; padding-right: 20px; padding-top: 64px; padding-bottom: 64px; background: var(--Color-Scheme-1-Background, white); overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 48px; display: inline-flex">
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 48px; display: flex">
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-                <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                    <div style="justify-content: flex-start; align-items: center; display: inline-flex">
-                        <div style="color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Join</div>
-                    </div>
-                    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 20px; display: flex">
-                        <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 36px; font-family: BioRhyme; font-weight: 400; line-height: 43.20px; word-wrap: break-word">Stay Updated with Exclusive Music Releases</div>
-                        <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Don’t miss out on the latest tracks and exclusive content. Sign up now to be the first to know!</div>
-                    </div>
-                </div>
-                <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-                    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                        <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 18px; font-family: BioRhyme; font-weight: 400; line-height: 25.20px; word-wrap: break-word">Exclusive Access</div>
-                        <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Get unreleased songs and early access.</div>
-                    </div>
-                </div>
-            </div>
-            <div style="justify-content: flex-start; align-items: center; gap: 24px; display: inline-flex">
-                <div data-alternate="False" data-icon-position="No icon" data-small="False" data-style="Secondary" style="padding-left: 12px; padding-right: 12px; padding-top: 6px; padding-bottom: 6px; overflow: hidden; border-radius: 6px; outline: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: center; align-items: center; gap: 8px; display: flex">
-                    <div style="color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 500; line-height: 24px; word-wrap: break-word">Subscribe</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div style="width: 100%; height: 100%; padding-left: 20px; padding-right: 20px; padding-top: 64px; padding-bottom: 64px; background: var(--Color-Scheme-1-Background, white); overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: center; gap: 32px; display: inline-flex">
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-        <div style="justify-content: flex-start; align-items: center; display: inline-flex">
-            <div style="text-align: center; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Connect</div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 20px; display: flex">
-            <div style="align-self: stretch; text-align: center; color: var(--Color-Scheme-1-Text, black); font-size: 36px; font-family: BioRhyme; font-weight: 400; line-height: 43.20px; word-wrap: break-word">Get in Touch</div>
-            <div style="align-self: stretch; text-align: center; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">We'd love to hear from you!</div>
-        </div>
-    </div>
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: center; gap: 24px; display: flex">
-        <div style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">First Name</div>
-                <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex"></div>
-            </div>
-            <div style="flex: 1 1 0; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: inline-flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Last Name</div>
-                <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex"></div>
-            </div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Email</div>
-                <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex"></div>
-            </div>
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Phone Number</div>
-                <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex"></div>
-            </div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-            <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Choose a Topic</div>
-            <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 16px; display: inline-flex">
-                <div style="flex: 1 1 0; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Select One...</div>
-                <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                    <div style="width: 11.41px; height: 7.12px; left: 6.29px; top: 8.29px; position: absolute; background: var(--Opacity-Neutral-Darkest-60, rgba(0, 0, 0, 0.60))"></div>
-                </div>
-            </div>
-        </div>
-        <div style="align-self: stretch; padding-top: 16px; padding-bottom: 16px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-            <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Which best describes you?</div>
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 14px; display: flex">
-                <div style="align-self: stretch; height: 24px; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Artist Inquiry</div>
-                    </div>
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Booking Request</div>
-                    </div>
-                </div>
-                <div style="align-self: stretch; height: 24px; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Fan Message</div>
-                    </div>
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Collaboration Idea</div>
-                    </div>
-                </div>
-                <div style="align-self: stretch; height: 24px; justify-content: flex-start; align-items: flex-start; gap: 24px; display: inline-flex">
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Other Inquiry</div>
-                    </div>
-                    <div data-alternate="False" data-selected="False" style="flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 12px; display: flex">
-                        <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 100px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-                        <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Other</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 8px; display: flex">
-            <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Message</div>
-            <div data-alternate="False" style="align-self: stretch; height: 180px; padding-top: 12px; padding-bottom: 12px; padding-right: 12px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                <div style="flex: 1 1 0; color: var(--Opacity-Neutral-Darkest-60, rgba(0, 0, 0, 0.60)); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Type your message...</div>
-                <div style="width: -723.17px; height: 726px; left: 844.36px; top: 1200.96px; position: absolute; transform: rotate(135deg); transform-origin: top left; outline: 1px var(--Color-Neutral-Darkest, black) solid; outline-offset: -0.50px"></div>
-                <div style="width: 728.49px; height: -720px; left: 842.12px; top: 172px; position: absolute; transform: rotate(135deg); transform-origin: top left; outline: 1px var(--Color-Neutral-Darkest, black) solid; outline-offset: -0.50px"></div>
-            </div>
-        </div>
-        <div data-alternate="False" data-selected="False" style="align-self: stretch; padding-bottom: 16px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-            <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 2px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-            <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">I accept the Terms</div>
-        </div>
-        <div data-alternate="False" data-icon-position="No icon" data-small="False" data-style="Primary" style="padding-left: 12px; padding-right: 12px; padding-top: 6px; padding-bottom: 6px; background: var(--Color-Fuchsia-Pink, #A045A0); border-radius: 6px; outline: 1px var(--Color-Fuchsia-Pink, #A045A0) solid; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-            <div style="color: var(--Color-White, white); font-size: 16px; font-family: IBM Plex Sans; font-weight: 500; line-height: 24px; word-wrap: break-word">Submit</div>
-        </div>
-    </div>
-</div>
-<div style="width: 100%; height: 100%; padding-left: 20px; padding-right: 20px; padding-top: 48px; padding-bottom: 48px; background: var(--Color-Scheme-1-Background, white); overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 48px; display: inline-flex">
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 48px; display: flex">
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: flex">
-            <div style="align-self: stretch; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Connect With Us</div>
-                <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Spotify</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Apple Music</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">YouTube</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Instagram</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">TikTok</div>
-                    </div>
-                </div>
-            </div>
-            <div style="align-self: stretch; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Stay Updated</div>
-                <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Latest News</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">New Releases</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Tour Dates</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Fan Club</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Merch Store</div>
-                    </div>
-                </div>
-            </div>
-            <div style="align-self: stretch; overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Get Involved</div>
-                <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Join Us</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Contact Us</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Support Us</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Follow Us</div>
-                    </div>
-                    <div style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Be Inspired</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 600; line-height: 24px; word-wrap: break-word">Subscribe</div>
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">Join our newsletter for the latest updates on music and events.</div>
-            </div>
-            <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 12px; display: flex">
-                <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                    <div data-alternate="False" data-type="Default" style="align-self: stretch; padding-top: 8px; padding-bottom: 8px; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-bottom: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-                        <div style="flex: 1 1 0; color: var(--Opacity-Neutral-Darkest-60, rgba(0, 0, 0, 0.60)); font-size: 16px; font-family: IBM Plex Sans; font-weight: 400; line-height: 24px; word-wrap: break-word">Your Email Here</div>
-                    </div>
-                    <div data-alternate="False" data-icon-position="No icon" data-small="False" data-style="Secondary" style="align-self: stretch; padding-left: 12px; padding-right: 12px; padding-top: 6px; padding-bottom: 6px; border-radius: 6px; outline: 2px var(--Color-Neutral-Darkest, black) solid; justify-content: center; align-items: center; gap: 8px; display: inline-flex">
-                        <div style="color: var(--Color-Neutral-Darkest, black); font-size: 16px; font-family: IBM Plex Sans; font-weight: 500; line-height: 24px; word-wrap: break-word">Join</div>
-                    </div>
-                </div>
-                <div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 12px; font-family: IBM Plex Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">By subscribing, you consent to our Privacy Policy and updates.</div>
-            </div>
-        </div>
-    </div>
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-        <div style="align-self: stretch; height: 0px; outline: 2px var(--Color-Scheme-1-Border, black) solid; outline-offset: -1px"></div>
-        <div style="align-self: stretch; padding-bottom: 16px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-            <div style="justify-content: flex-start; align-items: flex-start; gap: 12px; display: inline-flex">
-                <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                    <div style="width: 18px; height: 18px; left: 3px; top: 3.24px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-                </div>
-                <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                    <div style="width: 20.01px; height: 14.01px; left: 1.99px; top: 5px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-                </div>
-            </div>
-            <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-                <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                    <div style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Privacy Policy</div>
-                    <div style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Terms of Use</div>
-                    <div style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Cookie Policy</div>
-                </div>
-                <div style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">© 2024 Your Brand. All rights reserved.</div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Footer section with policy links -->
-<div style="width: 100%; height: 100%; padding-left: 20px; padding-right: 20px; padding-top: 48px; padding-bottom: 48px; background: var(--Color-Scheme-1-Background, white); overflow: hidden; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 48px; display: inline-flex">
-    <!-- Other footer content remains the same -->
-    
-    <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 24px; display: flex">
-        <div style="align-self: stretch; height: 0px; outline: 2px var(--Color-Scheme-1-Border, black) solid; outline-offset: -1px"></div>
-        <div style="align-self: stretch; padding-bottom: 16px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-            <div style="justify-content: flex-start; align-items: flex-start; gap: 12px; display: inline-flex">
-                <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                    <div style="width: 18px; height: 18px; left: 3px; top: 3.24px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-                </div>
-                <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                    <div style="width: 20.01px; height: 14.01px; left: 1.99px; top: 5px; position: absolute; background: var(--Color-Scheme-1-Text, black)"></div>
-                </div>
-            </div>
-            <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 32px; display: flex">
-                <div style="flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 16px; display: flex">
-                    <!-- Replace with tooltip-enabled policy links -->
-                    <div class="policy-tooltip" style="position: relative; display: inline-block;">
-                        <a href="#" id="mobile-privacy-policy" style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Privacy Policy</a>
-                        <div class="tooltip-content" style="visibility: hidden; opacity: 0; position: absolute; bottom: 125%; left: 0; background-color: white; color: #333; text-align: left; border-radius: 8px; padding: 15px; width: 280px; max-height: 250px; overflow-y: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 100; transition: opacity 0.3s, visibility 0.3s; pointer-events: none;">
-                            <h3 style="margin-top: 0; font-size: 16px;">Privacy Policy Highlights</h3>
-                            <p style="font-size: 12px; margin: 8px 0;">We collect information you provide directly to us when you subscribe or fill out forms.</p>
-                            <button class="view-full-policy" data-modal="privacy-modal" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;">View Full Policy</button>
-                        </div>
-                    </div>
-                    
-                    <div class="policy-tooltip" style="position: relative; display: inline-block;">
-                        <a href="#" id="mobile-terms-policy" style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Terms of Use</a>
-                        <div class="tooltip-content" style="visibility: hidden; opacity: 0; position: absolute; bottom: 125%; left: 0; background-color: white; color: #333; text-align: left; border-radius: 8px; padding: 15px; width: 280px; max-height: 250px; overflow-y: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 100; transition: opacity 0.3s, visibility 0.3s; pointer-events: none;">
-                            <h3 style="margin-top: 0; font-size: 16px;">Terms of Service Highlights</h3>
-                            <p style="font-size: 12px; margin: 8px 0;">By using our website, you agree to these Terms of Service.</p>
-                            <button class="view-full-policy" data-modal="terms-modal" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;">View Full Terms</button>
-                        </div>
-                    </div>
-                    
-                    <div class="policy-tooltip" style="position: relative; display: inline-block;">
-                        <a href="#" id="mobile-cookie-policy" style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; text-decoration: underline; line-height: 21px; word-wrap: break-word">Cookie Policy</a>
-                        <div class="tooltip-content" style="visibility: hidden; opacity: 0; position: absolute; bottom: 125%; left: 0; background-color: white; color: #333; text-align: left; border-radius: 8px; padding: 15px; width: 280px; max-height: 250px; overflow-y: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 100; transition: opacity 0.3s, visibility 0.3s; pointer-events: none;">
-                            <h3 style="margin-top: 0; font-size: 16px;">Cookie Settings</h3>
-                            <p style="font-size: 12px; margin: 8px 0;">We use cookies to enhance your browsing experience.</p>
-                            <div style="display: flex; align-items: center; margin: 8px 0;">
-                                <label class="toggle-switch-mini" style="position: relative; display: inline-block; width: 36px; height: 18px; margin-right: 8px;">
-                                    <input type="checkbox" id="mobile-performance-cookies" checked style="opacity: 0; width: 0; height: 0;">
-                                    <span class="toggle-slider-mini" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 18px;"></span>
-                                </label>
-                                <span style="font-size: 12px;">Performance Cookies</span>
-                            </div>
-                            <button class="view-full-policy" data-modal="cookies-modal" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;">Manage All Cookies</button>
-                        </div>
-                    </div>
-                </div>
-                <div style="color: var(--Color-Scheme-1-Text, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">© 2024 Your Brand. All rights reserved.</div>
-            </div>
-        </div>
-    </div>
-</div>
+</header>
 
-<!-- Add the Terms tooltip to the checkbox in the contact form -->
-<div data-alternate="False" data-selected="False" style="align-self: stretch; padding-bottom: 16px; justify-content: flex-start; align-items: center; gap: 8px; display: inline-flex">
-    <div style="width: 18px; height: 18px; position: relative; background: var(--Opacity-Transparent, rgba(255, 255, 255, 0)); border-radius: 2px; outline: 2px var(--Color-Neutral-Darkest, black) solid"></div>
-    <div style="justify-content: center; display: flex; flex-direction: column; color: var(--Color-Neutral-Darkest, black); font-size: 14px; font-family: IBM Plex Sans; font-weight: 400; line-height: 21px; word-wrap: break-word">
-        I accept the 
-        <span class="policy-tooltip" style="position: relative; display: inline-block;">
-            <a href="#" id="mobile-terms-form" style="color: var(--Color-Scheme-1-Text, black); text-decoration: underline;">Terms</a>
-            <div class="tooltip-content" style="visibility: hidden; opacity: 0; position: absolute; bottom: 125%; left: 0; background-color: white; color: #333; text-align: left; border-radius: 8px; padding: 15px; width: 280px; max-height: 250px; overflow-y: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 100; transition: opacity 0.3s, visibility 0.3s; pointer-events: none;">
-                <h3 style="margin-top: 0; font-size: 16px;">Terms of Service Highlights</h3>
-                <p style="font-size: 12px; margin: 8px 0;">By using our website, you agree to these Terms of Service.</p>
-                <button class="view-full-policy" data-modal="terms-modal" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;">View Full Terms</button>
+    <!-- Latest Posts Section -->
+<section class="latest-posts">
+    <div class="sidebar">
+        <h3 class="sidebar-title">Latest Posts</h3>
+        <div class="sidebar-links">
+            <a href="#" class="sidebar-link" id="new-releases" onclick="alert('New Releases coming soon!')">New Releases</a>
+            <a href="#" class="sidebar-link" id="behind-scenes" onclick="alert('Behind Scenes content coming soon!')">Behind Scenes</a>
+            <a href="#" class="sidebar-link" id="fan-stories" onclick="alert('Fan Stories coming soon!')">Fan Stories</a>
+            <a href="#" class="sidebar-link" id="upcoming-events" onclick="alert('Upcoming Events coming soon!')">Upcoming Events</a>
+        </div>
+    </div>
+    <div class="content">
+        <div class="post-card">
+            <img src="https://via.placeholder.com/280x150/333333/FFFFFF?text=Coming+Soon" alt="Latest Album" class="post-image"> <!-- Adjusted placeholder size for mobile -->
+            <div class="post-details">
+                <div class="post-text">
+                    <h4 class="post-title">Latest Album</h4>
+                    <p class="post-description">Coming Soon !</p>
+                </div>
+                <div class="post-stream-link"> <!-- Changed class for clarity -->
+                    <a href="https://linktr.ee/kytheonlyone" target="_blank" class="stream-here">Stream Here</a>
+                </div>
             </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="newsletter-content">
+            <div class="newsletter-header">
+                <div class="section-label">Join</div>
+                <div class="section-title-container">
+                    <h2 class="section-title">Stay Updated with Exclusive Music Releases</h2>
+                    <p class="section-subtitle">Don't miss out on the latest tracks and exclusive content. Sign up now to be the first to know!</p>
+                </div>
+            </div>
+            <div class="newsletter-feature">
+                <h3 class="feature-title">Exclusive Access</h3>
+                <p class="feature-description">Get unreleased songs and early access.</p>
+            </div>
+            <form id="newsletter-form" class="newsletter-form">
+                <input type="email" id="newsletter-email" class="newsletter-input" placeholder="Your Email Here" required>
+                <button type="submit" class="btn btn-secondary">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact">
+        <div class="contact-header">
+            <div class="section-label">Connect</div>
+            <div class="section-title-container">
+                <h2 class="section-title">Get in Touch</h2>
+                <p class="section-subtitle">I'd love to hear from you!</p>
+            </div>
+        </div>
+        
+        <form id="contact-form" class="contact-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" class="form-input" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-input">
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <label>Which best describes you?</label>
+                <div class="radio-group">
+                    <div class="radio-row">
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="artist" required>
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Artist Inquiry</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="booking">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Booking Request</span>
+                        </label>
+                    </div>
+                    <div class="radio-row">
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="fan">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Fan Message</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="collab">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Collaboration Idea</span>
+                        </label>
+                    </div>
+                    <div class="radio-row">
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="inquiry">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Other Inquiry</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="inquiry-type" value="other">
+                            <span class="radio-custom"></span>
+                            <span class="radio-label">Other</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" class="form-textarea" placeholder="Type your message..." required></textarea>
+            </div>
+            
+            <label class="checkbox-option">
+                <input type="checkbox" name="terms" id="terms" required>
+                <span class="checkbox-custom"></span>
+                <span class="checkbox-label">I accept the 
+                    <span class="policy-tooltip">
+                        <a href="#" id="open-terms">Terms</a>
+                        <div class="tooltip-content">
+                            <h3>Terms of Service Highlights</h3>
+                            <p>By using our website, you agree to these Terms of Service.</p>
+                            <p>You may download materials for personal, non-commercial viewing only.</p>
+                            <button class="btn btn-small btn-secondary view-full-policy" data-modal="terms-modal">View Full Terms</button>
+                        </div>
+                    </span>
+                </span>
+            </label>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-columns">
+                <div class="footer-column">
+                    <h4 class="footer-heading">Connect With Me</h4>
+<div class="social-links">
+    <a href="https://www.youtube.com/@KyOfficial_03" target="_blank" rel="noopener" class="social-link">
+        <span class="social-icon youtube-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.593 7.20301C21.4791 6.78041 21.2565 6.39501 20.9474 6.08518C20.6382 5.77534 20.2533 5.55187 19.831 5.43701C18.265 5.00701 12 5.00001 12 5.00001C12 5.00001 5.736 4.99301 4.169 5.40401C3.74693 5.52415 3.36282 5.75078 3.05357 6.06214C2.74431 6.3735 2.52029 6.75913 2.403 7.18201C1.99 8.74801 1.986 11.996 1.986 11.996C1.986 11.996 1.982 15.26 2.392 16.81C2.622 17.667 3.297 18.344 4.155 18.575C5.737 19.005 11.985 19.012 11.985 19.012C11.985 19.012 18.25 19.019 19.816 18.609C20.2385 18.4943 20.6237 18.2714 20.9337 17.9622C21.2436 17.653 21.4674 17.2682 21.583 16.846C21.997 15.281 22 12.034 22 12.034C22 12.034 22.02 8.76901 21.593 7.20301ZM9.996 15.005L10.001 9.00501L15.208 12.01L9.996 15.005Z" fill="currentColor"/>
+            </svg>
         </span>
-    </div>
+        <span>YouTube</span>
+    </a>
+    <a href="https://www.instagram.com/kytheonlyone" target="_blank" rel="noopener" class="social-link">
+        <span class="social-icon instagram-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="currentColor"/>
+            </svg>
+        </span>
+        <span>Instagram</span>
+    </a>
 </div>
-
-<!-- Add the Privacy Policy tooltip to the subscription disclaimer -->
-<div style="align-self: stretch; color: var(--Color-Scheme-1-Text, black); font-size: 12px; font-family: IBM Plex Sans; font-weight: 400; line-height: 18px; word-wrap: break-word">
-    By subscribing, you consent to our 
-    <span class="policy-tooltip" style="position: relative; display: inline-block;">
-        <a href="#" id="mobile-privacy-subscribe" style="color: var(--Color-Scheme-1-Text, black); text-decoration: underline;">Privacy Policy</a>
-        <div class="tooltip-content" style="visibility: hidden; opacity: 0; position: absolute; bottom: 125%; left: 0; background-color: white; color: #333; text-align: left; border-radius: 8px; padding: 15px; width: 280px; max-height: 250px; overflow-y: auto; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); z-index: 100; transition: opacity 0.3s, visibility 0.3s; pointer-events: none;">
-            <h3 style="margin-top: 0; font-size: 16px;">Privacy Policy Highlights</h3>
-            <p style="font-size: 12px; margin: 8px 0;">We collect information you provide directly to us when you subscribe.</p>
-            <button class="view-full-policy" data-modal="privacy-modal" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 6px 10px; font-size: 12px; cursor: pointer;">View Full Policy</button>
-        </div>
-    </span>
-    and updates.
-</div>
-
-<!-- Add modals for the full policies -->
-<div id="privacy-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center;">
-    <div class="modal-content" style="background-color: white; margin: auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; position: relative;">
-        <span class="close-modal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</span>
-        <h2>Privacy Policy</h2>
-        <div class="modal-body">
-            <!-- Privacy policy content -->
-            <p>This Privacy Policy describes how your personal information is collected, used, and shared when you visit our website.</p>
-            <h3>Information We Collect</h3>
-            <p>We collect information you provide directly to us when you subscribe to our newsletter, fill out a form, or otherwise communicate with us.</p>
-            <!-- More content -->
-        </div>
-        <button class="close-modal-btn" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 8px 16px; margin-top: 20px; cursor: pointer;">Close</button>
-    </div>
-</div>
-
-<div id="terms-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center;">
-    <div class="modal-content" style="background-color: white; margin: auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; position: relative;">
-        <span class="close-modal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</span>
-        <h2>Terms of Service</h2>
-        <div class="modal-body">
-            <!-- Terms content -->
-            <p>By accessing or using our website, you agree to be bound by these Terms of Service.</p>
-            <h3>Use License</h3>
-            <p>Permission is granted to temporarily download one copy of the materials on our website for personal, non-commercial transitory viewing only.</p>
-            <!-- More content -->
-        </div>
-        <button class="close-modal-btn" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 8px 16px; margin-top: 20px; cursor: pointer;">Close</button>
-    </div>
-</div>
-
-<div id="cookies-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); align-items: center; justify-content: center;">
-    <div class="modal-content" style="background-color: white; margin: auto; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; position: relative;">
-        <span class="close-modal" style="position: absolute; top: 10px; right: 15px; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</span>
-        <h2>Cookie Settings</h2>
-        <div class="modal-body">
-            <!-- Cookie settings content -->
-            <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content.</p>
-            <div style="margin: 20px 0;">
-                <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <label class="toggle-switch" style="position: relative; display: inline-block; width: 50px; height: 24px; margin-right: 10px;">
-                        <input type="checkbox" id="essential-cookies" checked disabled style="opacity: 0; width: 0; height: 0;">
-                        <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
-                    </label>
-                    <div>
-                        <div style="font-weight: bold;">Essential Cookies</div>
-                        <div style="font-size: 12px; color: #666;">Required for basic site functionality (always on)</div>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-heading">Stay Updated</h4>
+                    <div class="footer-links">
+                        <a href="javascript:void(0);" class="footer-link" onclick="alert('Tour Dates coming soon! Stay Updated')">Tour Dates</a>
+                        <a href="javascript:void(0);" class="footer-link" onclick="alert('Merch Store coming soon! Stay Updated')">Merch Store</a>
                     </div>
                 </div>
-                
-                <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <label class="toggle-switch" style="position: relative; display: inline-block; width: 50px; height: 24px; margin-right: 10px;">
-                        <input type="checkbox" id="performance-cookies" checked style="opacity: 0; width: 0; height: 0;">
-                        <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
-                    </label>
-                    <div>
-                        <div style="font-weight: bold;">Performance Cookies</div>
-                        <div style="font-size: 12px; color: #666;">Help us improve site performance and analytics</div>
-                    </div>
-                </div>
-                
-                <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <label class="toggle-switch" style="position: relative; display: inline-block; width: 50px; height: 24px; margin-right: 10px;">
-                        <input type="checkbox" id="functional-cookies" checked style="opacity: 0; width: 0; height: 0;">
-                        <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
-                    </label>
-                    <div>
-                        <div style="font-weight: bold;">Functional Cookies</div>
-                        <div style="font-size: 12px; color: #666;">Enable enhanced functionality and personalization</div>
-                    </div>
-                </div>
-                
-                <div style="display: flex; align-items: center; margin: 10px 0;">
-                    <label class="toggle-switch" style="position: relative; display: inline-block; width: 50px; height: 24px; margin-right: 10px;">
-                        <input type="checkbox" id="targeting-cookies" checked style="opacity: 0; width: 0; height: 0;">
-                        <span class="toggle-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .3s; border-radius: 24px;"></span>
-                    </label>
-                    <div>
-                        <div style="font-weight: bold;">Targeting Cookies</div>
-                        <div style="font-size: 12px; color: #666;">Used for targeted advertising and content</div>
-                    </div>
+                <div class="footer-newsletter">
+                    <h4 class="footer-heading">Subscribe</h4>
+                    <p class="footer-text">Join my newsletter for the latest updates on my music and events.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your Email Here" class="newsletter-input" id="footer-email">
+                        <button type="submit" class="btn btn-secondary">Join</button>
+                    </form>
+                    <p class="footer-disclaimer">By subscribing, you consent to our 
+                            <a href="privacy-policy-mobile.html">Privacy Policy</a>
+                    </p>
                 </div>
             </div>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-            <button id="save-cookie-preferences" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 8px 16px; cursor: pointer;">Save Preferences</button>
-            <button class="close-modal-btn" style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; padding: 8px 16px; cursor: pointer;">Close</button>
+        <div class="footer-bottom">
+            <div class="divider"></div>
+            <div class="copyright-section">
+              <p class="copyright">© 2025 Ky. Built from pain. Protected by purpose. All rights reserved.</p>
+              <div class="legal-links">
+                <a href="privacy-policy-mobile.html" class="btn btn-secondary btn-small">Privacy Policy</a>
+                <a href="terms-of-service-mobile.html" class="btn btn-secondary btn-small">Terms of Service</a>
+                <a href="cookies-settings-mobile.html" class="btn btn-secondary btn-small">Cookie Settings</a>
+              </div>
+            </div>
         </div>
+    </footer>
+
+    <!-- Modal Overlays -->
+<div id="terms-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="terms-modal-title" aria-describedby="terms-modal-description">
+    <div class="modal-content">
+        <button class="close-button" data-modal="terms-modal" aria-label="Close dialog">&times;</button>
+        <h2 id="terms-modal-title">Terms of Service</h2>
+        <p id="terms-modal-description">Full details about terms of service go here...</p>
     </div>
 </div>
+
+<div id="privacy-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title" aria-describedby="privacy-modal-description">
+    <div class="modal-content">
+        <button class="close-button" data-modal="privacy-modal" aria-label="Close dialog">&times;</button>
+        <h2 id="privacy-modal-title">Privacy Policy</h2>
+        <p id="privacy-modal-description">Details about how we handle your data go here...</p>
+    </div>
+</div>
+
+<div id="cookies-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="cookies-modal-title" aria-describedby="cookies-modal-description">
+    <div class="modal-content">
+        <button class="close-button" data-modal="cookies-modal" aria-label="Close dialog">&times;</button>
+        <h2 id="cookies-modal-title">Cookie Policy</h2>
+        <p id="cookies-modal-description">Explanation about cookies, tracking, and user consent goes here...</p>
+    </div>
+</div>
+
+    <!-- Cookie Consent Banner -->
+    <div class="cookie-banner" id="cookie-banner">
+        <div class="cookie-banner-content">
+            <p>This website uses cookies to ensure you get the best experience on our website. <a href="#" id="learn-more-cookies">Learn more</a></p>
+            <div class="cookie-banner-buttons">
+                <button class="btn btn-secondary" id="customize-cookies">Customize</button>
+                <button class="btn btn-primary" id="accept-cookies">Accept All Cookies</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="desktop.js"></script>
+    <script src="../Zoho CRM/zoho-integration.js"></script>
+    <script>
+        // Mobile Navigation Toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenuContainer = document.querySelector('.nav-menu-container');
+        const navMenu = document.getElementById('nav-menu-mobile');
+
+        if (navToggle && navMenuContainer && navMenu) {
+            navToggle.addEventListener('click', () => {
+                const isExpanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
+                navToggle.setAttribute('aria-expanded', !isExpanded);
+                navMenuContainer.classList.toggle('active');
+                // Optional: Add class to body to prevent scrolling when menu is open
+                // document.body.classList.toggle('no-scroll'); 
+            });
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+        
+        // Close modals with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active, .modal:not(.hidden)').forEach(function(modal) { // Ensure only visible modals are targeted
+                    modal.style.display = 'none';
+                    if (modal.classList.contains('active')) { // If using 'active' class for visibility
+                        modal.classList.remove('active');
+                    }
+                });
+            }
+        });
+        
+        // Initialize Zoho CRM integration
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing Zoho CRM integration for mobile...');
+            
+            // Remove any existing event listeners from newsletter forms (cloneNode trick)
+            const newsletterForms = document.querySelectorAll('form.newsletter-form');
+            newsletterForms.forEach(form => {
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
+            });
+            
+            // Re-attach event listeners to the new forms
+            const mainNewsletterForm = document.getElementById('newsletter-form');
+            if (mainNewsletterForm) {
+                mainNewsletterForm.addEventListener('submit', handleNewsletterSubmit);
+            }
+            const footerNewsletterForm = document.querySelector('.footer-newsletter .newsletter-form');
+            if (footerNewsletterForm) {
+                footerNewsletterForm.addEventListener('submit', handleNewsletterSubmit);
+            }
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleContactFormSubmit);
+            }
+
+            // Initialize Zoho CRM integration function if it exists
+            if (typeof initZohoCRMIntegration === 'function') {
+                initZohoCRMIntegration();
+                console.log('Zoho CRM integration initialized');
+            } else {
+                console.error('Zoho CRM integration function not found');
+            }
+        });
+
+        async function handleNewsletterSubmit(e) {
+            e.preventDefault();
+            const emailInput = this.querySelector('input[type="email"]');
+            const email = emailInput.value;
+            const formId = this.id || 'footer-newsletter-form'; // Differentiate source
+            const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
+            const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
+            const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
+
+            try {
+                const response = await fetch('../Zoho CRM/zoho-proxy.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'createLead',
+                        leadData: { Email: email, Last_Name: lastName, Lead_Source: leadSource, Description: description }
+                    })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Thank you for subscribing!');
+                    this.reset();
+                } else {
+                    console.error('Zoho error:', result);
+                    alert('There was an error. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('Connection error. Please try again later.');
+            }
+        }
+
+        async function handleContactFormSubmit(e) {
+            e.preventDefault();
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const messageInput = document.getElementById('message');
+
+            const firstName = firstNameInput ? firstNameInput.value : '';
+            const lastName = lastNameInput ? lastNameInput.value : '';
+            const email = emailInput ? emailInput.value : '';
+            const phone = phoneInput ? phoneInput.value : '';
+            const message = messageInput ? messageInput.value : '';
+            let inquiryType = '';
+            const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]:checked');
+            if (inquiryInputs.length > 0) {
+                inquiryType = inquiryInputs[0].value;
+            }
+
+            try {
+                const response = await fetch('../Zoho CRM/zoho-proxy.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'createLead',
+                        leadData: {
+                            First_Name: firstName, Last_Name: lastName, Email: email, Phone: phone,
+                            Description: message, Lead_Source: 'Website Contact Form', Industry: inquiryType
+                        }
+                    })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Thank you for your message! I\'ll get back to you soon.');
+                    this.reset();
+                } else {
+                    console.error('Zoho error:', result);
+                    alert('There was an error. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('Connection error. Please try again later.');
+            }
+        }
+    </script>
+
+    <!-- Test Zoho form removed for production mobile version -->
+</body>
+</html>
