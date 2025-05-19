@@ -1,0 +1,29 @@
+# Environment variables and credentials
+.env
+.env.local
+*.env.*.local
+config.php
+
+# Logs
+*.log
+zoho_*.txt
+zoho_debug_log.txt
+zoho_error_log.txt
+zoho_request_log.txt
+zoho_response_log.txt
+
+# PHP files with credentials (create a template instead)
+# Uncomment if you want to exclude these files
+# Zoho\ CRM/credentials.php
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+/node_modules
+/vendor
+
+# Build files
+/dist
+/build
