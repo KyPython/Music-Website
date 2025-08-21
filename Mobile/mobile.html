@@ -298,110 +298,63 @@
         }
         
         // Close modals with ESC key
-        (function mobileRun(){
-            function run(){
-                // Newsletter form
-                const newsletterForm = document.getElementById('newsletter-form');
-                if (newsletterForm) {
-                    newsletterForm.addEventListener('submit', async function(e) {
-                        e.preventDefault();
-                        console.log('Mobile newsletter form submitted');
-                        const emailInput = this.querySelector('input[type="email"]');
-                        const email = emailInput.value;
-                        const formId = this.id || 'footer-newsletter-form';
-                        const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
-                        const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
-                        const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
-
-                        try {
-                                const response = await fetch('/api/zoho', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    action: 'createLead',
-                                    leadData: { Email: email, Last_Name: lastName, Lead_Source: leadSource, Description: description }
-                                })
-                            });
-                            const result = await response.json();
-                            console.log('Mobile newsletter form response:', result);
-                            if (response.ok) {
-                                alert('Thank you for subscribing!');
-                                this.reset();
-                            } else {
-                                console.error('Zoho error:', result);
-                                alert('There was an error. Please try again later.');
-                            }
-                        } catch (error) {
-                            console.error('Submission error:', error);
-                            alert('Connection error. Please try again later.');
-                        }
-                    });
-                    try { newsletterForm.dataset.jsAttached = '1'; } catch(e){}
-                }
-
-                // Contact form
-                const contactForm = document.getElementById('contact-form');
-                if (contactForm) {
-                    contactForm.addEventListener('submit', async function(e) {
-                        e.preventDefault();
-                        console.log('Mobile contact form submitted');
-                        const firstNameInput = document.getElementById('firstName');
-                        const lastNameInput = document.getElementById('lastName');
-                        const emailInput = document.getElementById('email');
-                        const phoneInput = document.getElementById('phone');
-                        const messageInput = document.getElementById('message');
-
-                        const firstName = firstNameInput ? firstNameInput.value : '';
-                        const lastName = lastNameInput ? lastNameInput.value : '';
-                        const email = emailInput ? emailInput.value : '';
-                        const phone = phoneInput ? phoneInput.value : '';
-                        const message = messageInput ? messageInput.value : '';
-                        let inquiryType = '';
-                        const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]:checked');
-                        if (inquiryInputs.length > 0) {
-                            inquiryType = inquiryInputs[0].value;
-                        }
-
-                        try {
-                                const response = await fetch('/api/zoho', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                    action: 'createLead',
-                                    leadData: {
-                                        First_Name: firstName, Last_Name: lastName, Email: email, Phone: phone,
-                                        Description: message, Lead_Source: 'Website Contact Form', Industry: inquiryType
-                                    }
-                                })
-                            });
-                            const result = await response.json();
-                            console.log('Mobile contact form response:', result);
-                            if (response.ok) {
-                                alert('Thank you for your message! I\'ll get back to you soon.');
-                                this.reset();
-                            } else {
-                                console.error('Zoho error:', result);
-                                alert('There was an error. Please try again later.');
-                            }
-                        } catch (error) {
-                            console.error('Submission error:', error);
-                            alert('Connection error. Please try again later.');
-                        }
-                    });
-                    try { contactForm.dataset.jsAttached = '1'; } catch(e){}
-                }
-
-                // Initialize Zoho CRM integration
-                if (typeof initZohoCRMIntegration === 'function') {
-                    initZohoCRMIntegration();
-                    console.log('Zoho CRM integration initialized');
-                } else {
-                    console.error('Zoho CRM integration function not found');
-                }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active, .modal:not(.hidden)').forEach(function(modal) { // Ensure only visible modals are targeted
+                    modal.style.display = 'none';
+                    if (modal.classList.contains('active')) { // If using 'active' class for visibility
+                        modal.classList.remove('active');
+                    }
+                });
+            }
+        });
+        
+        // Initialize Zoho CRM integration
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing Zoho CRM integration for mobile...');
+            
+            // Remove any existing event listeners from newsletter forms (cloneNode trick)
+            const newsletterForms = document.querySelectorAll('form.newsletter-form');
+            newsletterForms.forEach(form => {
+                const newForm = form.cloneNode(true);
+                form.parentNode.replaceChild(newForm, form);
+            });
+            
+            // Re-attach event listeners to the new forms
+            const mainNewsletterForm = document.getElementById('newsletter-form');
+            if (mainNewsletterForm) {
+                mainNewsletterForm.addEventListener('submit', handleNewsletterSubmit);
+                try { mainNewsletterForm.dataset.jsAttached = '1'; } catch(e){}
+            }
+            const footerNewsletterForm = document.querySelector('.footer-newsletter .newsletter-form');
+            if (footerNewsletterForm) {
+                footerNewsletterForm.addEventListener('submit', handleNewsletterSubmit);
+                try { footerNewsletterForm.dataset.jsAttached = '1'; } catch(e){}
+            }
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', handleContactFormSubmit);
+                try { contactForm.dataset.jsAttached = '1'; } catch(e){}
             }
 
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
-        })();
+            // Initialize Zoho CRM integration function if it exists
+            if (typeof initZohoCRMIntegration === 'function') {
+                initZohoCRMIntegration();
+                console.log('Zoho CRM integration initialized');
+            } else {
+                console.error('Zoho CRM integration function not found');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Mobile newsletter form submitted');
+                    const emailInput = this.querySelector('input[type="email"]');
+                    const email = emailInput.value;
                     const formId = this.id || 'footer-newsletter-form';
                     const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
                     const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
