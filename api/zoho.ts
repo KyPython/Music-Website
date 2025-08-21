@@ -1,10 +1,14 @@
 // Vercel Serverless Function: /api/zoho.ts
 // Environment variables expected:
 // ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, optional ZOHO_REGION (com|eu|in|au)
+// Optional anti-abuse: RECAPTCHA_SECRET (verify client token), RATE_LIMIT_WINDOW (seconds), RATE_LIMIT_MAX (requests)
 const ZOHO_CLIENT_ID = process.env.ZOHO_CLIENT_ID;
 const ZOHO_CLIENT_SECRET = process.env.ZOHO_CLIENT_SECRET;
 const ZOHO_REFRESH_TOKEN = process.env.ZOHO_REFRESH_TOKEN;
 const ZOHO_REGION = (process.env.ZOHO_REGION || 'com').toLowerCase();
+const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
+const RATE_LIMIT_WINDOW = Number(process.env.RATE_LIMIT_WINDOW || '60'); // seconds
+const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || '10');
 
 function getZohoDomains(region: string) {
   // Default to global (.com) endpoints. Add mappings for other regions as needed.
@@ -130,11 +134,55 @@ export default async function handler(req: any, res: any) {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
+  // Simple in-memory rate limiter per IP
   try {
-    const { action, leadData } = req.body || {};
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+    const now = Date.now();
+    if (!(global as any).__zohoRateLimit) (global as any).__zohoRateLimit = new Map();
+    const map: Map<string, { count: number; windowStart: number }> = (global as any).__zohoRateLimit;
+    const entry = map.get(ip as string) || { count: 0, windowStart: now };
+    if (now - entry.windowStart > RATE_LIMIT_WINDOW * 1000) {
+      entry.count = 0;
+      entry.windowStart = now;
+    }
+    entry.count += 1;
+    map.set(ip as string, entry);
+    if (entry.count > RATE_LIMIT_MAX) {
+      res.status(429).json({ error: 'Too many requests' });
+      return;
+    }
+  } catch (rlErr) {
+    console.warn('Rate limiter error', rlErr);
+  }
+  try {
+    const { action, leadData, recaptchaToken } = req.body || {};
     if (action !== 'createLead' || !leadData) {
       res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
       return;
+    }
+
+    // Optional reCAPTCHA verification (if RECAPTCHA_SECRET is set)
+    if (RECAPTCHA_SECRET) {
+      if (!recaptchaToken) {
+        res.status(400).json({ error: 'Missing recaptchaToken' });
+        return;
+      }
+      try {
+        const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: recaptchaToken }).toString(),
+        });
+        const rv = await r.json();
+        if (!rv.success || rv.score !== undefined && rv.score < 0.3) {
+          res.status(403).json({ error: 'Recaptcha verification failed', recaptcha: rv });
+          return;
+        }
+      } catch (reErr) {
+        console.error('Recaptcha verification error', reErr);
+        res.status(500).json({ error: 'Recaptcha verification error' });
+        return;
+      }
     }
 
     // Transform incoming form payload to Zoho field names
