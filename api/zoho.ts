@@ -76,6 +76,12 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
           headers: Object.assign({}, req.headers, { authorization: undefined }),
           body: req.body
         });
+        // Log raw request body for debugging
+        try {
+          console.log('ZohoAPI: Raw req.body:', JSON.stringify(req.body));
+        } catch (e) {
+          console.log('ZohoAPI: Could not stringify req.body:', req.body);
+        }
 
         if (req.method !== 'POST') {
           res.status(405).json({ error: 'Method not allowed' });
@@ -106,7 +112,7 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
           Description: message,
           Company: company,
         };
-        console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
+        console.log('ZohoAPI: Payload to Zoho:', JSON.stringify(zohoPayload, null, 2));
 
         // Optional reCAPTCHA verification
         if (typeof RECAPTCHA_SECRET !== 'undefined' && RECAPTCHA_SECRET) {
@@ -136,15 +142,23 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
         const accessToken = await getZohoAccessToken();
         try {
           let zohoRes = await createZohoLead(accessToken, zohoPayload);
-          console.log('ZohoAPI: Zoho response', JSON.stringify(zohoRes, null, 2));
+          console.log('ZohoAPI: Zoho response:', JSON.stringify(zohoRes, null, 2));
           if (zohoRes && zohoRes.data && zohoRes.data[0] && zohoRes.data[0].code !== 'SUCCESS') {
-            console.error('ZohoAPI: Zoho error response', JSON.stringify(zohoRes, null, 2));
+            console.error('ZohoAPI: Zoho error response:', JSON.stringify(zohoRes, null, 2));
           }
           res.status(200).json({ ok: true, zoho: zohoRes });
-          } catch (err) {
-            console.error('ZohoAPI: Error sending to Zoho', err);
-            res.status(500).json({ error: 'Zoho API error', details: err.message || String(err) });
+        } catch (err) {
+          console.error('ZohoAPI: Error sending to Zoho:', err);
+          if (err && err.response && typeof err.response.text === 'function') {
+            try {
+              const errorText = await err.response.text();
+              console.error('ZohoAPI: Raw Zoho error response:', errorText);
+            } catch (e2) {
+              console.error('ZohoAPI: Could not read raw Zoho error response:', e2);
+            }
           }
+          res.status(500).json({ error: 'Zoho API error', details: err.message || String(err) });
+        }
         } catch (err) {
           console.error('ZohoAPI: Handler error', err);
           res.status(500).json({ error: 'Internal server error', details: err.message || String(err) });
