@@ -18,11 +18,22 @@ $ZOHO_REGION = 'com'; // 'com' | 'eu' | 'in' | 'com.au'
 // Example (do NOT run from repo or commit these):
 // curl -s -X POST https://accounts.zoho.com/oauth/v2/token \
 //   -d grant_type=authorization_code \
-//   -d client_id=YOUR_CLIENT_ID \
-//   -d client_secret=YOUR_CLIENT_SECRET \
-//   -d code=GRANT_CODE
+//   -d client_id=1000.XNU14Z93RMPI0H7I7U84IBTA7SOS8Z \
+//   -d client_secret=0b6ff0ad3ce34c1cdcb8afc64d0f585b17f56efd6f \
+//   -d code=1000.37bf1d2090904232ee3a3e4f2e20d45a.106b55922c3eb723df8256949385670a
 
 // If you previously committed secrets here: rotate them now in Zoho Developer Console
 // (revoke old refresh tokens and regenerate client secret) and then add new values to env.
 
 ?>
+
+<?php
+
+
+
+
+curl -s -X POST https://accounts.zoho.com/oauth/v2/token \
+  -d grant_type=refresh_token \
+  -d client_id=1000.XNU14Z93RMPI0H7I7U84IBTA7SOS8Z \
+  -d client_secret=0b6ff0ad3ce34c1cdcb8afc64d0f585b17f56efd6f \
+  -d refresh_token=1000.82a4d5c9dbf4c375d5e17100c4997bd6.492e5c83b1bd3dae36a02428fe13bcd3 | jq .

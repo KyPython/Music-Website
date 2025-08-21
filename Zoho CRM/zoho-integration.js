@@ -1,188 +1,102 @@
-// Zoho CRM Integration
-function initZohoCRMIntegration() {
-  console.log('Setting up Zoho CRM integration');
-  
-  // Newsletter subscription form
-  const newsletterForms = document.querySelectorAll('form.newsletter-form');
-  newsletterForms.forEach(form => {
-    console.log('Found newsletter form:', form);
-    
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      
-      const email = form.querySelector('input[type="email"]').value;
-      if (!email || !email.includes('@')) {
-        // Show validation error
-        const errorMsg = document.createElement('div');
-        errorMsg.className = 'form-error-message form-message';
-        errorMsg.style.color = 'red';
-        errorMsg.style.marginTop = '10px';
-        errorMsg.textContent = 'Please enter a valid email address.';
-        form.appendChild(errorMsg);
-        return;
-      }
-      
-      // Show loading state
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Submitting...';
-      submitBtn.disabled = true;
-      
-      console.log('Submitting to Zoho CRM:', email);
-      
-      // Submit to Zoho CRM
-      submitToZohoCRM({
-        formType: 'newsletter',
-        leadData: {
-          Email: email,
-          Lead_Source: 'Website Newsletter',
-          Last_Name: 'Newsletter Subscriber',
-          Description: 'Subscribed to newsletter from website'
-        }
-      });
-    });
-  });
-}
+// Universal Zoho form integration
+(function () {
+  'use strict';
 
-// Function to submit data to Zoho CRM via server proxy
-function submitToZohoCRM(submission) {
-  // Show loading state
-  const form = submission.formType === 'newsletter' ? 
-    document.querySelector('form.newsletter-form') : 
-    document.querySelector('form.contact-form');
-  
-  const submitBtn = form.querySelector('button[type="submit"]');
-  const originalText = submitBtn.textContent;
-  
-  // Path to the PHP file - adjusted for your file structure
-  const proxyPath = '/api/zoho';
-  
-  console.log('Submitting to Zoho CRM:', submission.leadData);
-  console.log('Using proxy path:', proxyPath);
-  
-  // Use the server proxy to create a lead
-  fetch(proxyPath, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      action: 'createLead',
-      leadData: submission.leadData
-    })
-  })
-  .then(response => {
-    console.log('Response status:', response.status);
-    return response.text().then(text => {
-      console.log('Response text:', text);
-      if (!response.ok) {
-        throw new Error('Server proxy request failed with status: ' + response.status + ' - ' + text);
-      }
-      try {
-        return JSON.parse(text);
-      } catch (e) {
-        console.error('Failed to parse response as JSON:', text);
-        throw new Error('Invalid JSON response');
-      }
-    });
-  })
-  .then(result => {
-    // Success handling
-    console.log('Zoho CRM submission successful:', result);
-    submitBtn.textContent = 'Success!';
-    form.reset();
-    
-    // Remove any existing messages
-    const existingMessages = form.querySelectorAll('.form-success-message, .form-error-message');
-    existingMessages.forEach(msg => msg.remove());
-    
-    // Show success message
-    const successMsg = document.createElement('div');
-    successMsg.className = 'form-success-message';
-    successMsg.style.color = 'green';
-    successMsg.style.marginTop = '10px';
-    successMsg.textContent = 'Thanks for subscribing!';
-    form.appendChild(successMsg);
-    
-    // Reset button after delay
-    setTimeout(() => {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-    }, 2000);
-  })
-  .catch(error => {
-    console.error('Error submitting to Zoho CRM:', error);
-    submitBtn.textContent = 'Error';
-    
-    // Remove any existing messages
-    const existingMessages = form.querySelectorAll('.form-success-message, .form-error-message');
-    existingMessages.forEach(msg => msg.remove());
-    
-    // Show error message
-    const errorMsg = document.createElement('div');
-    errorMsg.className = 'form-error-message';
-    errorMsg.style.color = 'red';
-    errorMsg.style.marginTop = '10px';
-    errorMsg.textContent = 'There was an error submitting your information. Please try again.';
-    form.appendChild(errorMsg);
-    
-    // Reset button after delay
-    setTimeout(() => {
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-    }, 2000);
-  });
-}
-
-// Add this function to test the connection
-function testZohoConnection() {
-  console.log('Testing Zoho connection...');
-  
-  // Use the correct path to the Zoho proxy
-  const proxyPath = '/api/zoho';
-  
-  fetch(proxyPath, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      action: 'createLead',
-      leadData: {
-        Email: 'test@example.com',
-        Lead_Source: 'Website Test',
-        Last_Name: 'Test User',
-        Description: 'Test connection'
-      }
-    })
-  })
-  .then(response => {
-    console.log('Test response status:', response.status);
-    return response.text();
-  })
-  .then(text => {
-    console.log('Test response text:', text);
-    try {
-      const json = JSON.parse(text);
-      console.log('Test response JSON:', json);
-    } catch (e) {
-      console.error('Failed to parse response as JSON:', e);
+  function getFormData(form) {
+    const data = {};
+    const fm = new FormData(form);
+    for (const [k, v] of fm.entries()) {
+      data[k] = v;
     }
-  })
-  .catch(error => {
-    console.error('Test connection error:', error);
-  });
-}
 
-// Call the test function when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('DOM loaded, testing Zoho connection...');
-  testZohoConnection();
-});
+    // Also map common id-based fields
+    if (!data.First_Name && form.querySelector('#firstName')) data.First_Name = form.querySelector('#firstName').value;
+    if (!data.Last_Name && form.querySelector('#lastName')) data.Last_Name = form.querySelector('#lastName').value;
+    if (!data.Email && form.querySelector('#email')) data.Email = form.querySelector('#email').value;
+    if (!data.Phone && form.querySelector('#phone')) data.Phone = form.querySelector('#phone').value;
+    if (!data.Description && form.querySelector('#message')) data.Description = form.querySelector('#message').value;
 
-// Initialize when the script loads
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initZohoCRMIntegration);
-} else {
-  initZohoCRMIntegration();
-}
+    // Normalize radio group for inquiry-type
+    if (!data.lead_type) {
+      const checked = form.querySelector('input[name="inquiry-type"]:checked');
+      if (checked) data.lead_type = checked.value;
+    }
+
+    return data;
+  }
+
+  async function postToZoho(payload) {
+    const res = await fetch('/api/zoho', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const txt = await res.text();
+    try {
+      return { ok: res.ok, status: res.status, json: JSON.parse(txt) };
+    } catch (e) {
+      return { ok: res.ok, status: res.status, text: txt };
+    }
+  }
+
+  function showStatus(form, msg, ok) {
+    let el = form.querySelector('.zoho-status');
+    if (!el) {
+      el = document.createElement('div');
+      el.className = 'zoho-status';
+      el.style.marginTop = '0.5rem';
+      form.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.color = ok ? 'green' : 'red';
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    showStatus(form, 'Sending...', false);
+    const data = getFormData(form);
+
+    const lead = {
+      First_Name: data.First_Name || data.first_name || data.fname || '',
+      Last_Name: data.Last_Name || data.last_name || data.lname || '',
+      Email: data.Email || data.email || '',
+      Phone: data.Phone || data.phone || '',
+      Description: data.Description || data.message || '',
+      Lead_Source: data.lead_source || data.Lead_Source || 'Website Form'
+    };
+
+    // Map inquiry type
+    if (data.lead_type) {
+      lead.Industry = data.lead_type;
+    }
+
+    try {
+      const resp = await postToZoho({ action: 'createLead', leadData: lead });
+      if (resp.ok && resp.json && resp.json.zoho) {
+        showStatus(form, 'Thanks — we got your submission.', true);
+        form.reset();
+      } else if (resp.ok && resp.json) {
+        showStatus(form, 'Submission succeeded', true);
+        form.reset();
+      } else {
+        const msg = resp.json ? JSON.stringify(resp.json) : resp.text || 'Unknown error';
+        showStatus(form, 'Error: ' + msg, false);
+        console.error('Zoho submit failed', resp);
+      }
+    } catch (err) {
+      showStatus(form, 'Network or server error', false);
+      console.error(err);
+    }
+    setTimeout(() => showStatus(form, ''), 5000);
+  }
+
+  function init() {
+    document.querySelectorAll('form.zoho-form').forEach(f => {
+      f.removeEventListener('submit', handleSubmit);
+      f.addEventListener('submit', handleSubmit);
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+})();
