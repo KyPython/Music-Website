@@ -54,8 +54,19 @@
   async function handleSubmit(e) {
     e.preventDefault();
     const form = e.currentTarget;
+    // Prevent duplicate submissions
+    if (form.dataset.submitting === '1') {
+      console.warn('Form already submitting, ignoring duplicate submit', form);
+      return;
+    }
+    form.dataset.submitting = '1';
+    // Disable submit buttons to avoid double clicks
+    const submitButtons = Array.from(form.querySelectorAll('button[type="submit"], input[type="submit"]'));
+    submitButtons.forEach(b => { try { b.disabled = true; } catch (e) {} });
+
     showStatus(form, 'Sending...', false);
     const data = getFormData(form);
+    console.debug('Zoho integration: submitting form', form.id || form.className, data);
 
     // Client-side validation to avoid native browser 'not focusable' errors
     // Ensure at least one inquiry-type radio is selected when the group exists
@@ -95,31 +106,68 @@
       lead.Industry = data.lead_type;
     }
 
-    try {
-      const resp = await postToZoho({ action: 'createLead', leadData: lead });
-      if (resp.ok && resp.json && resp.json.zoho) {
-        showStatus(form, 'Thanks — we got your submission.', true);
-        form.reset();
-      } else if (resp.ok && resp.json) {
-        showStatus(form, 'Submission succeeded', true);
-        form.reset();
-      } else {
-        const msg = resp.json ? JSON.stringify(resp.json) : resp.text || 'Unknown error';
-        showStatus(form, 'Error: ' + msg, false);
-        console.error('Zoho submit failed', resp);
+    // Try sending, with one retry on network failure
+    let attempt = 0;
+    let lastError = null;
+    while (attempt < 2) {
+      attempt += 1;
+      try {
+        const resp = await postToZoho({ action: 'createLead', leadData: lead });
+        if (resp.ok && resp.json && resp.json.zoho) {
+          showStatus(form, 'Thanks — we got your submission.', true);
+          form.reset();
+          lastError = null;
+          break;
+        } else if (resp.ok && resp.json) {
+          showStatus(form, 'Submission succeeded', true);
+          form.reset();
+          lastError = null;
+          break;
+        } else {
+          const msg = resp.json ? JSON.stringify(resp.json) : resp.text || 'Unknown error';
+          showStatus(form, 'Error: ' + msg, false);
+          console.error('Zoho submit failed', resp);
+          lastError = new Error('Zoho API error: ' + (resp.status || 'no-status'));
+          break; // don't retry on application-level errors
+        }
+      } catch (err) {
+        lastError = err;
+        console.warn('Zoho integration network error, attempt', attempt, err);
+        if (attempt < 2) {
+          // short backoff before retry
+          await new Promise(r => setTimeout(r, 500));
+          continue;
+        }
       }
-    } catch (err) {
-      showStatus(form, 'Network or server error', false);
-      console.error(err);
     }
-    setTimeout(() => showStatus(form, ''), 5000);
+    if (lastError) {
+      showStatus(form, 'Network or server error', false);
+      console.error('Zoho submit final error', lastError);
+    }
+  // re-enable submit buttons and clear submitting flag
+  submitButtons.forEach(b => { try { b.disabled = false; } catch (e) {} });
+  try { delete form.dataset.submitting; } catch (e) {}
+
+  setTimeout(() => showStatus(form, ''), 5000);
   }
 
   function init() {
-    document.querySelectorAll('form.zoho-form').forEach(f => {
-      f.removeEventListener('submit', handleSubmit);
-      f.addEventListener('submit', handleSubmit);
-      try { f.dataset.jsAttached = '1'; } catch (e) {}
+    // Attach to canonical zoho-form plus known form IDs/classes to avoid requiring HTML edits
+    const selectors = [
+      'form.zoho-form',
+      'form#newsletter-form',
+      'form#contact-form',
+      '.footer-newsletter form',
+      'form.newsletter-form'
+    ];
+    const seen = new Set();
+    selectors.join(',').split(',').forEach(sel => {
+      document.querySelectorAll(sel.trim()).forEach(f => {
+        if (seen.has(f)) return; seen.add(f);
+        f.removeEventListener('submit', handleSubmit);
+        f.addEventListener('submit', handleSubmit);
+        try { f.dataset.jsAttached = '1'; } catch (e) {}
+      });
     });
   }
 
