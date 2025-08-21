@@ -2,13 +2,25 @@
 // Environment variables expected:
 // ZOHO_CLIENT_ID, ZOHO_CLIENT_SECRET, ZOHO_REFRESH_TOKEN, optional ZOHO_REGION (com|eu|in|au)
 // Optional anti-abuse: RECAPTCHA_SECRET (verify client token), RATE_LIMIT_WINDOW (seconds), RATE_LIMIT_MAX (requests)
+declare const process: {
+  env: {
+    ZOHO_CLIENT_ID?: string;
+    ZOHO_CLIENT_SECRET?: string;
+    ZOHO_REFRESH_TOKEN?: string;
+    ZOHO_REGION?: string;
+    RECAPTCHA_SECRET?: string;
+    RATE_LIMIT_WINDOW?: string;
+    RATE_LIMIT_MAX?: string;
+  };
+};
+
 const ZOHO_CLIENT_ID = process.env.ZOHO_CLIENT_ID;
 const ZOHO_CLIENT_SECRET = process.env.ZOHO_CLIENT_SECRET;
 const ZOHO_REFRESH_TOKEN = process.env.ZOHO_REFRESH_TOKEN;
 const ZOHO_REGION = (process.env.ZOHO_REGION || 'com').toLowerCase();
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
-const RATE_LIMIT_WINDOW = Number(process.env.RATE_LIMIT_WINDOW || '60'); // seconds
-const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || '10');
+// const RATE_LIMIT_WINDOW = Number(process.env.RATE_LIMIT_WINDOW || '60'); // unused
+// const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || '10'); // unused
 
 function getZohoDomains(region: string) {
   // Default to global (.com) endpoints. Add mappings for other regions as needed.
@@ -24,19 +36,7 @@ function getZohoDomains(region: string) {
   }
 }
 
-// Basic validation of required environment variables to make errors obvious in logs
-function ensureEnv() {
-  const missing: string[] = [];
-  if (!ZOHO_CLIENT_ID) missing.push('ZOHO_CLIENT_ID');
-  if (!ZOHO_CLIENT_SECRET) missing.push('ZOHO_CLIENT_SECRET');
-  if (!ZOHO_REFRESH_TOKEN) missing.push('ZOHO_REFRESH_TOKEN');
-  if (missing.length) {
-    throw new Error('Missing environment variables: ' + missing.join(', '));
-  }
-}
-
-// Helper: Get Zoho access token (with better error messages)
-async function getZohoAccessToken() {
+async function getZohoAccessToken(): Promise<string> {
   ensureEnv();
   const domains = getZohoDomains(ZOHO_REGION);
   const params = new URLSearchParams({
@@ -47,19 +47,22 @@ async function getZohoAccessToken() {
   });
   const url = `${domains.accounts}/oauth/v2/token`;
   const res = await fetch(url, {
-          const { action, leadData, recaptchaToken } = req.body || {};
-          if (action !== 'createLead' || !leadData) {
-            res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
-            return;
-          }
-          // Map inquiry type and message robustly
-          const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
-          const message = leadData.Description || leadData.message || leadData.Message || '';
-          // Transform incoming form payload to Zoho field names
-          const transformed = transformLeadData({
-            ...leadData,
-            Industry: inquiryType,
-            Description: message,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
+  });
+  const text = await res.text();
+  let data: any;
+  try {
+    data = JSON.parse(text);
+  } catch (e: any) {
+    throw new Error(`Failed to parse token response (${res.status}): ${text}`);
+  }
+  if (!data.access_token) {
+    throw new Error('Zoho access token error: ' + JSON.stringify(data));
+  }
+  return data.access_token;
+}
           });
   let data: any;
   try {
@@ -109,104 +112,103 @@ function transformLeadData(incoming: any) {
   }
 
   return lead;
-}
-
-// Helper: Create Zoho Lead with robust error handling
-async function createZohoLead(accessToken: string, leadData: any) {
+async function createZohoLead(accessToken: string, leadData: any): Promise<any> {
   const domains = getZohoDomains(ZOHO_REGION);
   const url = `${domains.api}/crm/v2/Leads`;
+  const payload = {
+    data: [leadData]
+  };
   const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Authorization': `Zoho-oauthtoken ${accessToken}`,
-      // Debug: log incoming request
-      try {
-        console.log('ZohoAPI: Incoming request', {
-          method: req.method,
-          url: req.url,
-          headers: Object.assign({}, req.headers, { authorization: undefined }),
-          body: req.body
-        });
-      } catch (e) { console.error('ZohoAPI: Error logging request', e); }
-
-      if (req.method !== 'POST') {
-        res.status(405).json({ error: 'Method not allowed' });
-        return;
-      }
-
-      try {
-        const { action, leadData, recaptchaToken } = req.body || {};
-        if (action !== 'createLead' || !leadData) {
-          res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
-          return;
-        }
-
-        // Map inquiry type and message robustly
-        const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
-        const message = leadData.Description || leadData.message || leadData.Message || '';
-
-        // Construct Zoho payload
-        const zohoPayload = {
-          First_Name: leadData.First_Name || leadData.first_name || leadData.fname || '',
-          Last_Name: leadData.Last_Name || leadData.last_name || leadData.lname || '',
-          Email: leadData.Email || leadData.email || '',
-          Phone: leadData.Phone || leadData.phone || '',
-          Lead_Source: leadData.Lead_Source || leadData.lead_source || 'Website Form',
-          Industry: inquiryType,
-          Description: message,
-        };
-        // Debug: log full Zoho payload
-        try {
-          console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
-        } catch (e) { console.error('ZohoAPI: Error logging Zoho payload', e); }
-
-        // Optional reCAPTCHA verification (if RECAPTCHA_SECRET is set)
-        if (typeof RECAPTCHA_SECRET !== 'undefined' && RECAPTCHA_SECRET) {
-          if (!recaptchaToken) {
-            res.status(400).json({ error: 'Missing recaptchaToken' });
-            return;
-          }
-          try {
-            const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: recaptchaToken }).toString(),
-            });
-            const rv = await r.json();
-            if (!rv.success || (rv.score !== undefined && rv.score < 0.3)) {
-              res.status(403).json({ error: 'Recaptcha verification failed', recaptcha: rv });
-              return;
-            }
-          } catch (reErr) {
-            console.error('Recaptcha verification error', reErr);
-            res.status(500).json({ error: 'Recaptcha verification error' });
-            return;
-          }
-        }
-
-        // Get an access token and create the lead
-        const accessToken = await getZohoAccessToken();
-        let zohoRes: any = {};
-        try {
-          zohoRes = await createZohoLead(accessToken, zohoPayload);
-          // Debug: log Zoho API response
-          console.log('ZohoAPI: Zoho response', JSON.stringify(zohoRes, null, 2));
-        } catch (e) {
-          console.error('ZohoAPI: Error sending to Zoho', e);
-        }
-
-        // Return the Zoho response directly for debugging/visibility
-        res.status(200).json({ ok: true, zoho: zohoRes });
-      } catch (err: any) {
-        // Log full error server-side (Vercel logs)
-        console.error('api/zoho error:', err);
-        // Return useful error message to client but avoid leaking secrets
-        res.status(500).json({ error: err.message || String(err) });
-      }
-  } catch (err: any) {
-    // Log full error server-side (Vercel logs)
-    console.error('api/zoho error:', err);
-    // Return useful error message to client but avoid leaking secrets
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+  const text = await res.text();
+  let data: any;
+  try {
+    data = JSON.parse(text);
+  } catch (e: any) {
+    throw new Error(`Failed to parse Zoho response (${res.status}): ${text}`);
+  }
+  return data;
+}
     res.status(500).json({ error: err.message || String(err) });
   }
 }
+
+export default async function handler(req, res) {
+  try {
+    // Log incoming request
+    console.log('ZohoAPI: Incoming request', {
+      method: req.method,
+      url: req.url,
+      headers: Object.assign({}, req.headers, { authorization: undefined }),
+      body: req.body
+    });
+
+    if (req.method !== 'POST') {
+      res.status(405).json({ error: 'Method not allowed' });
+      return;
+    }
+
+    const { action, leadData, recaptchaToken } = req.body || {};
+    if (action !== 'createLead' || !leadData) {
+      res.status(400).json({ error: 'Invalid request: expected { action: \"createLead\", leadData: {...} }' });
+      return;
+    }
+
+    // Map inquiry type and message robustly
+    const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
+    const message = leadData.Description || leadData.message || leadData.Message || '';
+
+    // Construct Zoho payload
+    const zohoPayload = {
+      First_Name: leadData.First_Name || leadData.first_name || leadData.fname || '',
+      Last_Name: leadData.Last_Name || leadData.last_name || leadData.lname || '',
+      Email: leadData.Email || leadData.email || '',
+      Phone: leadData.Phone || leadData.phone || '',
+      Lead_Source: leadData.Lead_Source || leadData.lead_source || 'Website Form',
+      Industry: inquiryType,
+      Description: message,
+    };
+    console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
+
+    // Optional reCAPTCHA verification
+    if (typeof RECAPTCHA_SECRET !== 'undefined' && RECAPTCHA_SECRET) {
+      if (!recaptchaToken) {
+        res.status(400).json({ error: 'Missing recaptchaToken' });
+        return;
+      }
+      try {
+        const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: recaptchaToken }).toString(),
+        });
+        const rv = await r.json();
+        if (!rv.success || (rv.score !== undefined && rv.score < 0.3)) {
+          res.status(403).json({ error: 'Recaptcha verification failed', recaptcha: rv });
+          return;
+        }
+      } catch (reErr) {
+        console.error('Recaptcha verification error', reErr);
+        res.status(500).json({ error: 'Recaptcha verification error' });
+        return;
+      }
+    }
+
+    // Get an access token and create the lead
+    const accessToken = await getZohoAccessToken();
+    let zohoRes;
+    try {
+      zohoRes = await createZohoLead(accessToken, zohoPayload);
+      console.log('ZohoAPI: Zoho response', JSON.stringify(zohoRes, null, 2));
+    } catch (e) {
+      console.error('ZohoAPI: Error sending to Zoho', e);
+      res.status(500).json({ error: 'Zoho API error', details: e.message || String(e) });
+      return;
+    }
+
