@@ -220,3 +220,7 @@ try {
     http_response_code(500);
     echo json_encode(['error' => $e->getMessage()]);
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 75cf7e7 (Restore repository and add all files)
