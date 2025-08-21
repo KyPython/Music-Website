@@ -152,7 +152,16 @@
   }
 
   function init() {
-    // Attach to canonical zoho-form plus known form IDs/classes to avoid requiring HTML edits
+    // Attach helper that is idempotent
+    function attachForm(f){
+      if (!f || f.dataset.zohoAttached === '1') return;
+      try { f.removeEventListener('submit', handleSubmit); } catch(e){}
+      try { f.addEventListener('submit', handleSubmit); } catch(e){}
+      try { f.dataset.zohoAttached = '1'; f.dataset.jsAttached = '1'; } catch(e){}
+      try { console.log('ZohoCRM: attached handler to form', f.id || f.className || f); } catch(e){}
+    }
+
+    // Initial selectors to attach to (no HTML edits required)
     const selectors = [
       'form.zoho-form',
       'form#newsletter-form',
@@ -160,15 +169,46 @@
       '.footer-newsletter form',
       'form.newsletter-form'
     ];
-    const seen = new Set();
-    selectors.join(',').split(',').forEach(sel => {
-      document.querySelectorAll(sel.trim()).forEach(f => {
-        if (seen.has(f)) return; seen.add(f);
-        f.removeEventListener('submit', handleSubmit);
-        f.addEventListener('submit', handleSubmit);
-        try { f.dataset.jsAttached = '1'; } catch (e) {}
-      });
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(attachForm);
     });
+
+    // As a robust fallback, capture native form submits at document level and route to our handler
+    document.addEventListener('submit', function(e){
+      try {
+        const t = e.target;
+        if (!t || !(t instanceof HTMLFormElement)) return;
+        // If this form already has our handler, let it run; otherwise run our handler
+        if (t.dataset.zohoAttached !== '1') {
+          // prevent native navigation
+          try { e.preventDefault(); } catch(e){}
+          attachForm(t);
+          // call our handler with a synthetic event-like object
+          try { handleSubmit({ preventDefault: function(){}, currentTarget: t }); } catch(err){ console.error('ZohoCRM: error in fallback submit handler', err); }
+        }
+      } catch(err){ console.error('ZohoCRM submit-capture error', err); }
+    }, true);
+
+    // Observe DOM mutations to attach to forms added later without touching HTML
+    try {
+      const mo = new MutationObserver(function(mutations){
+        for (const m of mutations) {
+          if (!m.addedNodes) continue;
+          m.addedNodes.forEach(node => {
+            try {
+              if (!(node instanceof Element)) return;
+              // If the added node is a form itself
+              if (node.matches && node.matches('form.zoho-form, form#newsletter-form, form#contact-form, form.newsletter-form, .footer-newsletter form')) {
+                attachForm(node);
+              }
+              // Or contains such forms
+              node.querySelectorAll && node.querySelectorAll('form.zoho-form, form#newsletter-form, form#contact-form, form.newsletter-form, .footer-newsletter form').forEach(attachForm);
+            } catch(e){}
+          });
+        }
+      });
+      mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    } catch(e){ /* ignore in older browsers */ }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
