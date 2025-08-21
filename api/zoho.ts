@@ -119,113 +119,90 @@ async function createZohoLead(accessToken: string, leadData: any) {
     method: 'POST',
     headers: {
       'Authorization': `Zoho-oauthtoken ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ data: [leadData] }),
-  });
-  const text = await res.text();
-  let data: any;
-  try {
-    data = JSON.parse(text || '{}');
-  } catch (e) {
-    throw new Error(`Failed to parse Zoho create lead response (${res.status}): ${text}`);
-  }
-  if (!res.ok) {
-    // Attach the Zoho response body to the error for easier debugging in logs
-    const message = `Zoho API returned ${res.status}: ${JSON.stringify(data)}`;
-    throw new Error(message);
-  }
-  return data;
-}
-
-export default async function handler(req: any, res: any) {
-  // Debug: log incoming request
-  try {
-    console.log('ZohoAPI: Incoming request', {
-      method: req.method,
-      url: req.url,
-      headers: Object.assign({}, req.headers, { authorization: undefined }), // hide auth
-      body: req.body
-    });
-  } catch (e) { console.error('ZohoAPI: Error logging request', e); }
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
-  }
-  // Simple in-memory rate limiter per IP
-  try {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
-    const now = Date.now();
-    if (!(global as any).__zohoRateLimit) (global as any).__zohoRateLimit = new Map();
-    const map: Map<string, { count: number; windowStart: number }> = (global as any).__zohoRateLimit;
-    const entry = map.get(ip as string) || { count: 0, windowStart: now };
-    if (now - entry.windowStart > RATE_LIMIT_WINDOW * 1000) {
-      entry.count = 0;
-      entry.windowStart = now;
-    }
-    entry.count += 1;
-    map.set(ip as string, entry);
-    if (entry.count > RATE_LIMIT_MAX) {
-      res.status(429).json({ error: 'Too many requests' });
-      return;
-    }
-  } catch (rlErr) {
-    console.warn('Rate limiter error', rlErr);
-    // Debug: log payload to Zoho
-    try {
-      console.log('ZohoAPI: Lead payload', req.body.leadData);
-    } catch (e) { console.error('ZohoAPI: Error logging lead payload', e); }
-  }
-  try {
-    const { action, leadData, recaptchaToken } = req.body || {};
-    if (action !== 'createLead' || !leadData) {
-      res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
-      return;
-    }
-
-    // Optional reCAPTCHA verification (if RECAPTCHA_SECRET is set)
-    if (RECAPTCHA_SECRET) {
-      if (!recaptchaToken) {
-        res.status(400).json({ error: 'Missing recaptchaToken' });
-        return;
-        // Debug: log Zoho API response
-        try {
-          console.log('ZohoAPI: Zoho response', {
-            status: zohoResp.status,
-            statusText: zohoResp.statusText,
-            body: zohoJson
-          });
-        } catch (e) { console.error('ZohoAPI: Error logging Zoho response', e); }
-      }
+      // Debug: log incoming request
       try {
-      // Debug: log error
-      console.error('ZohoAPI: Error during lead creation', err);
-        const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: recaptchaToken }).toString(),
+        console.log('ZohoAPI: Incoming request', {
+          method: req.method,
+          url: req.url,
+          headers: Object.assign({}, req.headers, { authorization: undefined }),
+          body: req.body
         });
-        const rv = await r.json();
-        if (!rv.success || rv.score !== undefined && rv.score < 0.3) {
-          res.status(403).json({ error: 'Recaptcha verification failed', recaptcha: rv });
+      } catch (e) { console.error('ZohoAPI: Error logging request', e); }
+
+      if (req.method !== 'POST') {
+        res.status(405).json({ error: 'Method not allowed' });
+        return;
+      }
+
+      try {
+        const { action, leadData, recaptchaToken } = req.body || {};
+        if (action !== 'createLead' || !leadData) {
+          res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
           return;
         }
-      } catch (reErr) {
-        console.error('Recaptcha verification error', reErr);
-        res.status(500).json({ error: 'Recaptcha verification error' });
-        return;
+
+        // Map inquiry type and message robustly
+        const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
+        const message = leadData.Description || leadData.message || leadData.Message || '';
+
+        // Construct Zoho payload
+        const zohoPayload = {
+          First_Name: leadData.First_Name || leadData.first_name || leadData.fname || '',
+          Last_Name: leadData.Last_Name || leadData.last_name || leadData.lname || '',
+          Email: leadData.Email || leadData.email || '',
+          Phone: leadData.Phone || leadData.phone || '',
+          Lead_Source: leadData.Lead_Source || leadData.lead_source || 'Website Form',
+          Industry: inquiryType,
+          Description: message,
+        };
+        // Debug: log full Zoho payload
+        try {
+          console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
+        } catch (e) { console.error('ZohoAPI: Error logging Zoho payload', e); }
+
+        // Optional reCAPTCHA verification (if RECAPTCHA_SECRET is set)
+        if (typeof RECAPTCHA_SECRET !== 'undefined' && RECAPTCHA_SECRET) {
+          if (!recaptchaToken) {
+            res.status(400).json({ error: 'Missing recaptchaToken' });
+            return;
+          }
+          try {
+            const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: recaptchaToken }).toString(),
+            });
+            const rv = await r.json();
+            if (!rv.success || (rv.score !== undefined && rv.score < 0.3)) {
+              res.status(403).json({ error: 'Recaptcha verification failed', recaptcha: rv });
+              return;
+            }
+          } catch (reErr) {
+            console.error('Recaptcha verification error', reErr);
+            res.status(500).json({ error: 'Recaptcha verification error' });
+            return;
+          }
+        }
+
+        // Get an access token and create the lead
+        const accessToken = await getZohoAccessToken();
+        let zohoRes: any = {};
+        try {
+          zohoRes = await createZohoLead(accessToken, zohoPayload);
+          // Debug: log Zoho API response
+          console.log('ZohoAPI: Zoho response', JSON.stringify(zohoRes, null, 2));
+        } catch (e) {
+          console.error('ZohoAPI: Error sending to Zoho', e);
+        }
+
+        // Return the Zoho response directly for debugging/visibility
+        res.status(200).json({ ok: true, zoho: zohoRes });
+      } catch (err: any) {
+        // Log full error server-side (Vercel logs)
+        console.error('api/zoho error:', err);
+        // Return useful error message to client but avoid leaking secrets
+        res.status(500).json({ error: err.message || String(err) });
       }
-    }
-
-    // Transform incoming form payload to Zoho field names
-    const transformed = transformLeadData(leadData);
-
-    // Get an access token and create the lead
-    const accessToken = await getZohoAccessToken();
-    const zohoRes = await createZohoLead(accessToken, transformed);
-
-    // Return the Zoho response directly for debugging/visibility
-    res.status(200).json({ ok: true, zoho: zohoRes });
   } catch (err: any) {
     // Log full error server-side (Vercel logs)
     console.error('api/zoho error:', err);
