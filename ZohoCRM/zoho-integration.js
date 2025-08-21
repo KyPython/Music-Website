@@ -57,6 +57,30 @@
     showStatus(form, 'Sending...', false);
     const data = getFormData(form);
 
+    // Client-side validation to avoid native browser 'not focusable' errors
+    // Ensure at least one inquiry-type radio is selected when the group exists
+    const inquiryGroup = form.querySelectorAll('input[name="inquiry-type"]');
+    if (inquiryGroup && inquiryGroup.length > 0) {
+      const checked = form.querySelector('input[name="inquiry-type"]:checked');
+      if (!checked) {
+        showStatus(form, 'Please select an option for "Which best describes you?"', false);
+        // focus the first visible radio so the user can act
+        const first = inquiryGroup[0];
+        if (first && typeof first.focus === 'function') first.focus();
+        return;
+      }
+    }
+
+    // Ensure terms checkbox is checked if present
+    const terms = form.querySelector('input[name="terms"]');
+    if (terms) {
+      if (!terms.checked) {
+        showStatus(form, 'Please accept the Terms to continue.', false);
+        try { terms.focus(); } catch (e) {}
+        return;
+      }
+    }
+
     const lead = {
       First_Name: data.First_Name || data.first_name || data.fname || '',
       Last_Name: data.Last_Name || data.last_name || data.lname || '',
