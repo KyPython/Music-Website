@@ -47,11 +47,20 @@ async function getZohoAccessToken() {
   });
   const url = `${domains.accounts}/oauth/v2/token`;
   const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString(),
-  });
-  const text = await res.text();
+          const { action, leadData, recaptchaToken } = req.body || {};
+          if (action !== 'createLead' || !leadData) {
+            res.status(400).json({ error: 'Invalid request: expected { action: "createLead", leadData: {...} }' });
+            return;
+          }
+          // Map inquiry type and message robustly
+          const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
+          const message = leadData.Description || leadData.message || leadData.Message || '';
+          // Transform incoming form payload to Zoho field names
+          const transformed = transformLeadData({
+            ...leadData,
+            Industry: inquiryType,
+            Description: message,
+          });
   let data: any;
   try {
     data = JSON.parse(text);
