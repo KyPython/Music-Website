@@ -49,173 +49,180 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    <script>
+    (function setupPageHandlers(){
+        function run() {
+            // Close modals when clicking outside
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            }
 
-    <!-- Newsletter Section -->
-    <section class="newsletter">
-        <div class="newsletter-content">
-            <div class="newsletter-header">
-                <div class="section-label">Join</div>
-                <div class="section-title-container">
-                    <h2 class="section-title">Stay Updated with Exclusive Music Releases</h2>
-                    <p class="section-subtitle">Don't miss out on the latest tracks and exclusive content. Sign up now to be the first to know!</p>
-                </div>
-            </div>
-            <div class="newsletter-feature">
-                <h3 class="feature-title">Exclusive Access</h3>
-                <p class="feature-description">Get unreleased songs and early access.</p>
-            </div>
-            <form id="newsletter-form" class="newsletter-form zoho-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
-                <input type="email" id="newsletter-email" name="Email" class="newsletter-input" placeholder="Your Email Here" required>
-                <button type="submit" class="btn btn-secondary">Subscribe</button>
-            </form>
-        </div>
-    </section>
+            // Close modals with ESC key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    document.querySelectorAll('.modal').forEach(function(modal) {
+                        modal.style.display = 'none';
+                    });
+                }
+            });
 
-    <!-- Contact Form Section -->
-    <section class="contact">
-        <div class="contact-header">
-            <div class="section-label">Connect</div>
-            <div class="section-title-container">
-                <h2 class="section-title">Get in Touch</h2>
-                <p class="section-subtitle">I'd love to hear from you!</p>
-            </div>
-        </div>
-        
-                    <form id="contact-form" class="contact-form zoho-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="First_Name" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="Last_Name" class="form-input" required>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="Email" class="form-input" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="Phone" class="form-input">
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <label>Which best describes you?</label>
-                <div class="radio-group">
-                    <div class="radio-row">
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="artist">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Artist Inquiry</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="booking">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Booking Request</span>
-                        </label>
-                    </div>
-                    <div class="radio-row">
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="fan">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Fan Message</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="collab">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Collaboration Idea</span>
-                        </label>
-                    </div>
-                    <div class="radio-row">
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="inquiry">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Other Inquiry</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="inquiry-type" value="other">
-                            <span class="radio-custom"></span>
-                            <span class="radio-label">Other</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" name="Description" class="form-textarea" placeholder="Type your message..." required></textarea>
-            </div>
-            
-            <label class="checkbox-option">
-                    <input type="checkbox" name="terms" id="terms">
-                <span class="checkbox-custom"></span>
-                <span class="checkbox-label">I accept the 
-                    <span class="policy-tooltip">
-                        <a href="#" id="open-terms">Terms</a>
-                        <div class="tooltip-content">
-                            <h3>Terms of Service Highlights</h3>
-                            <p>By using our website, you agree to these Terms of Service.</p>
-                            <p>You may download materials for personal, non-commercial viewing only.</p>
-                            <button class="btn btn-small btn-secondary view-full-policy" data-modal="terms-modal">View Full Terms</button>
-                        </div>
-                    </span>
-                </span>
-            </label>
-            
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </section>
+            // Newsletter form in main content
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Newsletter form submitted');
+                    const email = document.getElementById('newsletter-email').value;
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-columns">
-                <div class="footer-column">
-                    <h4 class="footer-heading">Connect With Me</h4>
-                    <!-- Make sure your social links have the correct href attributes -->
-<div class="social-links">
-    <a href="https://www.youtube.com/@KyOfficial_03" target="_blank" rel="noopener" class="social-link">
-        <span class="social-icon youtube-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21.593 7.20301C21.4791 6.78041 21.2565 6.39501 20.9474 6.08518C20.6382 5.77534 20.2533 5.55187 19.831 5.43701C18.265 5.00701 12 5.00001 12 5.00001C12 5.00001 5.736 4.99301 4.169 5.40401C3.74693 5.52415 3.36282 5.75078 3.05357 6.06214C2.74431 6.3735 2.52029 6.75913 2.403 7.18201C1.99 8.74801 1.986 11.996 1.986 11.996C1.986 11.996 1.982 15.26 2.392 16.81C2.622 17.667 3.297 18.344 4.155 18.575C5.737 19.005 11.985 19.012 11.985 19.012C11.985 19.012 18.25 19.019 19.816 18.609C20.2385 18.4943 20.6237 18.2714 20.9337 17.9622C21.2436 17.653 21.4674 17.2682 21.583 16.846C21.997 15.281 22 12.034 22 12.034C22 12.034 22.02 8.76901 21.593 7.20301ZM9.996 15.005L10.001 9.00501L15.208 12.01L9.996 15.005Z" fill="currentColor"/>
-            </svg>
-        </span>
-        <span>YouTube</span>
-    </a>
-    <a href="https://www.instagram.com/kytheonlyone" target="_blank" rel="noopener" class="social-link">
-        <span class="social-icon instagram-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M16 3H8C5.23858 3 3 5.23858 3 8V16C3 18.7614 5.23858 21 8 21H16C18.7614 21 21 18.7614 21 16V8C21 5.23858 18.7614 3 16 3ZM19.25 16C19.2445 17.7926 17.7926 19.2445 16 19.25H8C6.20735 19.2445 4.75549 17.7926 4.75 16V8C4.75549 6.20735 6.20735 4.75549 8 4.75H16C17.7926 4.75549 19.2445 6.20735 19.25 8V16ZM16.75 8.25C17.3023 8.25 17.75 7.80228 17.75 7.25C17.75 6.69772 17.3023 6.25 16.75 6.25C16.1977 6.25 15.75 6.69772 15.75 7.25C15.75 7.80228 16.1977 8.25 16.75 8.25ZM12 7.5C9.51472 7.5 7.5 9.51472 7.5 12C7.5 14.4853 9.51472 16.5 12 16.5C14.4853 16.5 16.5 14.4853 16.5 12C16.5027 10.8057 16.0294 9.65957 15.1849 8.81508C14.3404 7.97059 13.1943 7.49734 12 7.5ZM9.25 12C9.25 13.5188 10.4812 14.75 12 14.75C13.5188 14.75 14.75 13.5188 14.75 12C14.75 10.4812 13.5188 9.25 12 9.25C10.4812 9.25 9.25 10.4812 9.25 12Z" fill="currentColor"/>
-            </svg>
-        </span>
-        <span>Instagram</span>
-    </a>
-</div>
-                </div>
-                <div class="footer-column">
-                    <h4 class="footer-heading">Stay Updated</h4>
-                    <div class="footer-links">
-                        <a href="javascript:void(0);" class="footer-link" onclick="alert('Tour Dates coming soon! Stay Updated')">Tour Dates</a>
-                        <a href="javascript:void(0);" class="footer-link" onclick="alert('Merch Store coming soon! Stay Updated')">Merch Store</a>
-                    </div>
-                </div>
-                <div class="footer-newsletter">
-                    <h4 class="footer-heading">Subscribe</h4>
-                    <p class="footer-text">Join my newsletter for the latest updates on my music and events.</p>
-                    <form class="newsletter-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
-                        <input type="email" placeholder="Your Email Here" class="newsletter-input" id="footer-email">
-                        <button type="submit" class="btn btn-secondary">Join</button>
-                    </form>
-                    <p class="footer-disclaimer">By subscribing, you consent to our 
-                            <a href="privacy-policy.html">Privacy Policy</a>
-                    </p>
+                    try {
+                            const response = await fetch('/api/zoho', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    Email: email,
+                                    Last_Name: 'Newsletter Subscriber',
+                                    Lead_Source: 'Website Newsletter',
+                                    Description: 'Subscribed to newsletter from main form'
+                                }
+                            })
+                        });
+
+                        const result = await response.json();
+                        console.log('Newsletter form response:', result);
+                        if (response.ok) {
+                            alert('Thank you for subscribing!');
+                            this.reset();
+                        } else {
+                            console.error('Zoho error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
+                });
+                try { newsletterForm.dataset.jsAttached = '1'; } catch(e){}
+            }
+
+            // Footer newsletter form
+            const footerForm = document.querySelector('.footer-newsletter .newsletter-form');
+            if (footerForm) {
+                footerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Footer newsletter form submitted');
+                    const email = document.getElementById('footer-email').value;
+
+                    try {
+                        const response = await fetch('/api/zoho', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    Email: email,
+                                    Last_Name: 'Footer Subscriber',
+                                    Lead_Source: 'Website Footer',
+                                    Description: 'Subscribed to newsletter from footer form'
+                                }
+                            })
+                        });
+
+                        const result = await response.json();
+                        console.log('Footer newsletter form response:', result);
+                        if (response.ok) {
+                            alert('Thank you for subscribing!');
+                            this.reset();
+                        } else {
+                            console.error('Zoho error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
+                });
+                try { footerForm.dataset.jsAttached = '1'; } catch(e){}
+            }
+
+            // Contact form
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Contact form submitted');
+
+                    // Get form values
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const message = document.getElementById('message').value;
+
+                    // Get selected inquiry type
+                    let inquiryType = '';
+                    const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]');
+                    for (const input of inquiryInputs) {
+                        if (input.checked) {
+                            inquiryType = input.value;
+                            break;
+                        }
+                    }
+
+                    try {
+                        const response = await fetch('/api/zoho', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    First_Name: firstName,
+                                    Last_Name: lastName,
+                                    Email: email,
+                                    Phone: phone,
+                                    Description: message,
+                                    Lead_Source: 'Website Contact Form',
+                                    Industry: inquiryType // Using Industry field for inquiry type
+                                }
+                            })
+                        });
+
+                        const result = await response.json();
+                        console.log('Contact form response:', result);
+                        if (response.ok) {
+                            alert('Thank you for your message! I\'ll get back to you soon.');
+                            this.reset();
+                        } else {
+                            console.error('Zoho error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
+                });
+                try { contactForm.dataset.jsAttached = '1'; } catch(e){}
+            }
+
+            // If you have a separate Zoho integration function, call it here
+            if (typeof initZohoCRMIntegration === 'function') {
+                initZohoCRMIntegration();
+                console.log('Additional Zoho CRM integration initialized');
+            }
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+    })();
+    </script>
                 </div>
             </div>
         </div>
