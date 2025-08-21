@@ -152,6 +152,67 @@
   }
 
   function init() {
+    // Aggressive startup logging: enumerate all forms and log their attributes
+    try {
+      const allForms = Array.from(document.querySelectorAll('form'));
+      console.info('ZohoCRM: script running, found', allForms.length, 'forms:', allForms.map(f => ({id: f.id, className: f.className, name: f.name, action: f.action, outerHTML: f.outerHTML.slice(0, 200)})));
+      if (window.self !== window.top) {
+        console.warn('ZohoCRM: running in a frame/iframe');
+      }
+      if (document.body && document.body.shadowRoot) {
+        console.warn('ZohoCRM: running in shadow DOM');
+      }
+    } catch (e) { console.error('ZohoCRM: error during startup form enumeration', e); }
+
+    // Log all selectors and how many forms they match
+    const selectors = [
+      'form.zoho-form',
+      'form#newsletter-form',
+      'form#contact-form',
+      '.footer-newsletter form',
+      'form.newsletter-form'
+    ];
+    selectors.forEach(sel => {
+      try {
+        const matches = Array.from(document.querySelectorAll(sel));
+        console.info('ZohoCRM: selector', sel, 'matched', matches.length, 'forms');
+      } catch (e) { console.error('ZohoCRM: selector error', sel, e); }
+    });
+
+    // Log every button click, even if not attached
+    try {
+      document.addEventListener('click', function (e) {
+        try {
+          const btn = e.target && e.target.closest && e.target.closest('button, input[type="submit"], a');
+          if (btn) {
+            const form = btn.form || btn.closest && btn.closest('form');
+            console.info('ZohoCRM: button clicked', {btn, form, btnType: btn.type, btnText: btn.textContent, formId: form && form.id, formClass: form && form.className});
+          }
+        } catch (e) {}
+      }, true);
+    } catch (e) {}
+
+    // Log every DOM mutation that adds a form
+    try {
+      const mo = new MutationObserver(function(mutations){
+        for (const m of mutations) {
+          if (!m.addedNodes) continue;
+          m.addedNodes.forEach(node => {
+            try {
+              if (node instanceof HTMLFormElement) {
+                console.info('ZohoCRM: form added via mutation', {id: node.id, className: node.className, name: node.name, action: node.action, outerHTML: node.outerHTML.slice(0, 200)});
+              }
+              if (node.querySelectorAll) {
+                node.querySelectorAll('form').forEach(f => {
+                  console.info('ZohoCRM: form added via mutation (descendant)', {id: f.id, className: f.className, name: f.name, action: f.action, outerHTML: f.outerHTML.slice(0, 200)});
+                });
+              }
+            } catch(e){}
+          });
+        }
+      });
+      mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+    } catch(e){ /* ignore in older browsers */ }
     // Startup/logging: helps debug when the script is loaded but handlers aren't firing
     try {
       console.info('ZohoCRM: script loaded — init starting', { readyState: document.readyState });
@@ -210,13 +271,6 @@
     }
 
     // Initial selectors to attach to (no HTML edits required)
-    const selectors = [
-      'form.zoho-form',
-      'form#newsletter-form',
-      'form#contact-form',
-      '.footer-newsletter form',
-      'form.newsletter-form'
-    ];
     selectors.forEach(sel => {
       document.querySelectorAll(sel).forEach(attachForm);
     });
