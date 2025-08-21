@@ -55,7 +55,7 @@ function submitToZohoCRM(submission) {
   const originalText = submitBtn.textContent;
   
   // Path to the PHP file - adjusted for your file structure
-  const proxyPath = '/Zoho%20CRM/zoho-proxy.php';
+  const proxyPath = '/api/zoho';
   
   console.log('Submitting to Zoho CRM:', submission.leadData);
   console.log('Using proxy path:', proxyPath);
@@ -139,7 +139,7 @@ function testZohoConnection() {
   console.log('Testing Zoho connection...');
   
   // Use the correct path to the Zoho proxy
-  const proxyPath = '/Zoho%20CRM/zoho-proxy.php';
+  const proxyPath = '/api/zoho';
   
   fetch(proxyPath, {
     method: 'POST',

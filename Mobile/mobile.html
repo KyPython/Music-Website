@@ -343,82 +343,96 @@
             }
         });
 
-        async function handleNewsletterSubmit(e) {
-            e.preventDefault();
-            const emailInput = this.querySelector('input[type="email"]');
-            const email = emailInput.value;
-            const formId = this.id || 'footer-newsletter-form'; // Differentiate source
-            const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
-            const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
-            const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Mobile newsletter form submitted');
+                    const emailInput = this.querySelector('input[type="email"]');
+                    const email = emailInput.value;
+                    const formId = this.id || 'footer-newsletter-form';
+                    const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
+                    const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
+                    const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
 
-            try {
-                const response = await fetch('/api/zoho', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'createLead',
-                        leadData: { Email: email, Last_Name: lastName, Lead_Source: leadSource, Description: description }
-                    })
-                });
-                const result = await response.json();
-                if (response.ok) {
-                    alert('Thank you for subscribing!');
-                    this.reset();
-                } else {
-                    console.error('Zoho error:', result);
-                    alert('There was an error. Please try again later.');
-                }
-            } catch (error) {
-                console.error('Submission error:', error);
-                alert('Connection error. Please try again later.');
-            }
-        }
-
-        async function handleContactFormSubmit(e) {
-            e.preventDefault();
-            const firstNameInput = document.getElementById('firstName');
-            const lastNameInput = document.getElementById('lastName');
-            const emailInput = document.getElementById('email');
-            const phoneInput = document.getElementById('phone');
-            const messageInput = document.getElementById('message');
-
-            const firstName = firstNameInput ? firstNameInput.value : '';
-            const lastName = lastNameInput ? lastNameInput.value : '';
-            const email = emailInput ? emailInput.value : '';
-            const phone = phoneInput ? phoneInput.value : '';
-            const message = messageInput ? messageInput.value : '';
-            let inquiryType = '';
-            const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]:checked');
-            if (inquiryInputs.length > 0) {
-                inquiryType = inquiryInputs[0].value;
-            }
-
-            try {
-                const response = await fetch('/api/zoho', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'createLead',
-                        leadData: {
-                            First_Name: firstName, Last_Name: lastName, Email: email, Phone: phone,
-                            Description: message, Lead_Source: 'Website Contact Form', Industry: inquiryType
+                    try {
+                            const response = await fetch('/api/zoho', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: { Email: email, Last_Name: lastName, Lead_Source: leadSource, Description: description }
+                            })
+                        });
+                        const result = await response.json();
+                        console.log('Mobile newsletter form response:', result);
+                        if (response.ok) {
+                            alert('Thank you for subscribing!');
+                            this.reset();
+                        } else {
+                            console.error('Zoho error:', result);
+                            alert('There was an error. Please try again later.');
                         }
-                    })
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
                 });
-                const result = await response.json();
-                if (response.ok) {
-                    alert('Thank you for your message! I\'ll get back to you soon.');
-                    this.reset();
-                } else {
-                    console.error('Zoho error:', result);
-                    alert('There was an error. Please try again later.');
-                }
-            } catch (error) {
-                console.error('Submission error:', error);
-                alert('Connection error. Please try again later.');
             }
-        }
+
+            // Contact form
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    console.log('Mobile contact form submitted');
+                    const firstNameInput = document.getElementById('firstName');
+                    const lastNameInput = document.getElementById('lastName');
+                    const emailInput = document.getElementById('email');
+                    const phoneInput = document.getElementById('phone');
+                    const messageInput = document.getElementById('message');
+
+                    const firstName = firstNameInput ? firstNameInput.value : '';
+                    const lastName = lastNameInput ? lastNameInput.value : '';
+                    const email = emailInput ? emailInput.value : '';
+                    const phone = phoneInput ? phoneInput.value : '';
+                    const message = messageInput ? messageInput.value : '';
+                    let inquiryType = '';
+                    const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]:checked');
+                    if (inquiryInputs.length > 0) {
+                        inquiryType = inquiryInputs[0].value;
+                    }
+
+                    try {
+                            const response = await fetch('/api/zoho', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    First_Name: firstName, Last_Name: lastName, Email: email, Phone: phone,
+                                    Description: message, Lead_Source: 'Website Contact Form', Industry: inquiryType
+                                }
+                            })
+                        });
+                        const result = await response.json();
+                        console.log('Mobile contact form response:', result);
+                        if (response.ok) {
+                            alert('Thank you for your message! I\'ll get back to you soon.');
+                            this.reset();
+                        } else {
+                            console.error('Zoho error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
+                });
+            }
+        });
     </script>
 
     <!-- Test Zoho form removed for production mobile version -->

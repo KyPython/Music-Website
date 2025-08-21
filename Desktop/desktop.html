@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Website</title>
-    <link rel="stylesheet" href="/Desktop/desktop.css">
+    <link rel="stylesheet" href="desktop.css">
+    <!-- Optional: Add favicon if you have one -->
+    <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=BioRhyme&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -284,16 +286,19 @@
         </div>
     </div>
 
-    <script src="desktop.js"></script>
+    <!-- Removed desktop.js reference (file does not exist) -->
     <script src="../Zoho CRM/zoho-integration.js"></script>
+    <!-- Optional: Replace with a local image if you want to avoid external errors -->
+    <!-- <img src="assets/coming-soon.png" alt="Latest Album" class="post-image"> -->
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         // Close modals when clicking outside
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
             }
         }
-        
+
         // Close modals with ESC key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -302,35 +307,17 @@
                 });
             }
         });
-        
-        // Initialize Zoho CRM integration
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Initializing Zoho CRM integration...');
-            
-            // Remove any existing event listeners from newsletter forms
-            const newsletterForms = document.querySelectorAll('form.newsletter-form');
-            newsletterForms.forEach(form => {
-                const newForm = form.cloneNode(true);
-                form.parentNode.replaceChild(newForm, form);
-            });
-            
-            // Initialize Zoho CRM integration
-            if (typeof initZohoCRMIntegration === 'function') {
-                initZohoCRMIntegration();
-                console.log('Zoho CRM integration initialized');
-            } else {
-                console.error('Zoho CRM integration function not found');
-            }
-        
+
         // Newsletter form in main content
         const newsletterForm = document.getElementById('newsletter-form');
         if (newsletterForm) {
             newsletterForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
+                console.log('Newsletter form submitted');
                 const email = document.getElementById('newsletter-email').value;
-                
+
                 try {
-                    const response = await fetch('/api/zoho', {
+                        const response = await fetch('/api/zoho', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -345,9 +332,9 @@
                             }
                         })
                     });
-                    
+
                     const result = await response.json();
-                    
+                    console.log('Newsletter form response:', result);
                     if (response.ok) {
                         alert('Thank you for subscribing!');
                         this.reset();
@@ -361,14 +348,15 @@
                 }
             });
         }
-        
+
         // Footer newsletter form
         const footerForm = document.querySelector('.footer-newsletter .newsletter-form');
         if (footerForm) {
             footerForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
+                console.log('Footer newsletter form submitted');
                 const email = document.getElementById('footer-email').value;
-                
+
                 try {
                     const response = await fetch('/api/zoho', {
                         method: 'POST',
@@ -385,9 +373,9 @@
                             }
                         })
                     });
-                    
+
                     const result = await response.json();
-                    
+                    console.log('Footer newsletter form response:', result);
                     if (response.ok) {
                         alert('Thank you for subscribing!');
                         this.reset();
@@ -401,20 +389,21 @@
                 }
             });
         }
-        
+
         // Contact form
         const contactForm = document.getElementById('contact-form');
         if (contactForm) {
             contactForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+                console.log('Contact form submitted');
+
                 // Get form values
                 const firstName = document.getElementById('firstName').value;
                 const lastName = document.getElementById('lastName').value;
                 const email = document.getElementById('email').value;
                 const phone = document.getElementById('phone').value;
                 const message = document.getElementById('message').value;
-                
+
                 // Get selected inquiry type
                 let inquiryType = '';
                 const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]');
@@ -424,7 +413,7 @@
                         break;
                     }
                 }
-                
+
                 try {
                     const response = await fetch('/api/zoho', {
                         method: 'POST',
@@ -444,9 +433,9 @@
                             }
                         })
                     });
-                    
+
                     const result = await response.json();
-                    
+                    console.log('Contact form response:', result);
                     if (response.ok) {
                         alert('Thank you for your message! I\'ll get back to you soon.');
                         this.reset();
@@ -460,13 +449,13 @@
                 }
             });
         }
-        
+
         // If you have a separate Zoho integration function, call it here
         if (typeof initZohoCRMIntegration === 'function') {
             initZohoCRMIntegration();
             console.log('Additional Zoho CRM integration initialized');
         }
-        });
+    });
     </script>
 
     <!-- Terms of Service Modal -->
@@ -492,34 +481,37 @@
       
       const email = this.querySelector('input[type="email"]').value;
       
-      // Try with a simple fetch to the PHP file
-    fetch('/api/zoho', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          action: 'createLead',
-          leadData: {
-            Email: email,
-            Last_Name: 'Test User',
-            Lead_Source: 'Test Form',
-            Description: 'Testing Zoho integration'
-          }
-        })
-      })
-      .then(response => {
-        resultDiv.textContent = 'Response status: ' + response.status;
-        return response.text();
-      })
-      .then(text => {
-        resultDiv.textContent += '\nResponse: ' + text;
-        console.log('Test response:', text);
-      })
-      .catch(error => {
-        resultDiv.textContent = 'Error: ' + error.message;
-        console.error('Test error:', error);
-      });
+      // Test Zoho integration with the correct endpoint
+                fetch('/api/zoho', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'createLead',
+                        leadData: {
+                            Email: email,
+                            Last_Name: 'Test User',
+                            Lead_Source: 'Test Form',
+                            Description: 'Testing Zoho integration'
+                        }
+                    })
+                })
+                .then(async response => {
+                    resultDiv.textContent = 'Response status: ' + response.status;
+                    let text = '';
+                    try {
+                        text = await response.text();
+                        resultDiv.textContent += '\nResponse: ' + text;
+                        console.log('Test response:', text);
+                    } catch (err) {
+                        resultDiv.textContent += '\nError parsing response.';
+                    }
+                })
+                .catch(error => {
+                    resultDiv.textContent = 'Error: ' + error.message;
+                    console.error('Test error:', error);
+                });
     });
   </script>
 </div>
