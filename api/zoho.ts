@@ -104,14 +104,16 @@ function transformLeadData(incoming: any) {
   });
 
   // Provide a sensible default for Company if still missing
+
   if (!lead.Company) {
     const first = lead.First_Name || incoming.firstName || '';
     const last = lead.Last_Name || incoming.lastName || '';
     const name = `${first} ${last}`.trim();
     lead.Company = name || 'Individual';
   }
-
   return lead;
+}
+
 async function createZohoLead(accessToken: string, leadData: any): Promise<any> {
   const domains = getZohoDomains(ZOHO_REGION);
   const url = `${domains.api}/crm/v2/Leads`;
@@ -135,8 +137,6 @@ async function createZohoLead(accessToken: string, leadData: any): Promise<any> 
   }
   return data;
 }
-    res.status(500).json({ error: err.message || String(err) });
-  }
 }
 
 export default async function handler(req, res) {
@@ -161,20 +161,24 @@ export default async function handler(req, res) {
     }
 
     // Map inquiry type and message robustly
-    const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
-    const message = leadData.Description || leadData.message || leadData.Message || '';
+const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
+const message = leadData.Description || leadData.message || leadData.Message || '';
+const firstName = leadData.First_Name || leadData.first_name || leadData.fname || '';
+const lastName = leadData.Last_Name || leadData.last_name || leadData.lname || '';
+const company = leadData.Company || leadData.company || `${firstName} ${lastName}`.trim() || 'Individual';
 
-    // Construct Zoho payload
-    const zohoPayload = {
-      First_Name: leadData.First_Name || leadData.first_name || leadData.fname || '',
-      Last_Name: leadData.Last_Name || leadData.last_name || leadData.lname || '',
-      Email: leadData.Email || leadData.email || '',
-      Phone: leadData.Phone || leadData.phone || '',
-      Lead_Source: leadData.Lead_Source || leadData.lead_source || 'Website Form',
-      Industry: inquiryType,
-      Description: message,
-    };
-    console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
+// Construct Zoho payload (Company is required by Zoho)
+const zohoPayload = {
+  First_Name: firstName,
+  Last_Name: lastName,
+  Email: leadData.Email || leadData.email || '',
+  Phone: leadData.Phone || leadData.phone || '',
+  Lead_Source: leadData.Lead_Source || leadData.lead_source || 'Website Form',
+  Industry: inquiryType,
+  Description: message,
+  Company: company,
+};
+console.log('ZohoAPI: Payload sent to Zoho', JSON.stringify(zohoPayload, null, 2));
 
     // Optional reCAPTCHA verification
     if (typeof RECAPTCHA_SECRET !== 'undefined' && RECAPTCHA_SECRET) {
@@ -206,8 +210,15 @@ export default async function handler(req, res) {
     try {
       zohoRes = await createZohoLead(accessToken, zohoPayload);
       console.log('ZohoAPI: Zoho response', JSON.stringify(zohoRes, null, 2));
+      if (zohoRes && zohoRes.data && zohoRes.data[0] && zohoRes.data[0].code !== 'SUCCESS') {
+        console.error('ZohoAPI: Zoho error response', JSON.stringify(zohoRes, null, 2));
+      }
     } catch (e) {
       console.error('ZohoAPI: Error sending to Zoho', e);
+      if (e && e.response) {
+        const errorText = await e.response.text();
+        console.error('ZohoAPI: Raw Zoho error response', errorText);
+      }
       res.status(500).json({ error: 'Zoho API error', details: e.message || String(e) });
       return;
     }
