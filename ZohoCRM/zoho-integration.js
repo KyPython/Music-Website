@@ -152,6 +152,54 @@
   }
 
   function init() {
+    // Startup/logging: helps debug when the script is loaded but handlers aren't firing
+    try {
+      console.info('ZohoCRM: script loaded — init starting', { readyState: document.readyState });
+    } catch (e) {}
+
+    // Global error handlers to surface runtime problems to the console so the user can paste them
+    try {
+      window.addEventListener('error', function (ev) {
+        try { console.error('ZohoCRM: window error', ev.error || ev.message, ev); } catch (e) {}
+      });
+      window.addEventListener('unhandledrejection', function (ev) {
+        try { console.error('ZohoCRM: unhandled rejection', ev.reason, ev); } catch (e) {}
+      });
+    } catch (e) {}
+
+    // Early pointerdown capture: attach handler to the form before a native submit can race
+    // This is non-UI and only binds event listeners on the document.
+    try {
+      document.addEventListener('pointerdown', function (e) {
+        try {
+          const btn = e.target && e.target.closest && e.target.closest('button[type="submit"], input[type="submit"], button');
+          if (!btn) return;
+          const form = btn.form || btn.closest && btn.closest('form');
+          if (!form) return;
+          if (form.dataset && form.dataset.zohoAttached !== '1') {
+            attachForm(form);
+            try { console.debug('ZohoCRM: attached handler on pointerdown for form', form.id || form.className); } catch (e) {}
+          }
+        } catch (e) {}
+      }, true);
+    } catch (e) {}
+
+    // Click capture: useful for buttons that may not produce a form submit event (type=button)
+    try {
+      document.addEventListener('click', function (e) {
+        try {
+          const btn = e.target && e.target.closest && e.target.closest('button[type="submit"], input[type="submit"], button, a');
+          if (!btn) return;
+          const form = btn.form || btn.closest && btn.closest('form');
+          try { console.debug('ZohoCRM: click detected', btn, 'form', form ? (form.id || form.className) : null); } catch (e) {}
+          if (!form) return;
+          if (form.dataset && form.dataset.zohoAttached !== '1') {
+            attachForm(form);
+            try { console.debug('ZohoCRM: attached handler on click for form', form.id || form.className); } catch (e) {}
+          }
+        } catch (e) {}
+      }, true);
+    } catch (e) {}
     // Attach helper that is idempotent
     function attachForm(f){
       if (!f || f.dataset.zohoAttached === '1') return;
@@ -173,7 +221,7 @@
       document.querySelectorAll(sel).forEach(attachForm);
     });
 
-    // As a robust fallback, capture native form submits at document level and route to our handler
+  // As a robust fallback, capture native form submits at document level and route to our handler
     document.addEventListener('submit', function(e){
       try {
         const t = e.target;
