@@ -287,7 +287,7 @@
     </div>
 
     <!-- Removed desktop.js reference (file does not exist) -->
-    <script src="../Zoho CRM/zoho-integration.js"></script>
+    <script src="/ZohoCRM/zoho-integration.js"></script>
     <!-- Optional: Replace with a local image if you want to avoid external errors -->
     <!-- <img src="assets/coming-soon.png" alt="Latest Album" class="post-image"> -->
     <script>
@@ -464,54 +464,4 @@
 </body>
 </html>
 
-<!-- Add this test form somewhere on your page for debugging -->
-<div style="margin-top: 50px; padding: 20px; border: 1px solid #ccc;">
-  <h3>Test Zoho Integration</h3>
-  <form id="test-zoho-form">
-    <input type="email" placeholder="Test Email" value="test@example.com">
-    <button type="submit">Test Zoho</button>
-    <div id="test-result" style="margin-top: 10px;"></div>
-  </form>
-  
-  <script>
-    document.getElementById('test-zoho-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const resultDiv = document.getElementById('test-result');
-      resultDiv.textContent = 'Testing...';
-      
-      const email = this.querySelector('input[type="email"]').value;
-      
-      // Test Zoho integration with the correct endpoint
-                fetch('/api/zoho', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        action: 'createLead',
-                        leadData: {
-                            Email: email,
-                            Last_Name: 'Test User',
-                            Lead_Source: 'Test Form',
-                            Description: 'Testing Zoho integration'
-                        }
-                    })
-                })
-                .then(async response => {
-                    resultDiv.textContent = 'Response status: ' + response.status;
-                    let text = '';
-                    try {
-                        text = await response.text();
-                        resultDiv.textContent += '\nResponse: ' + text;
-                        console.log('Test response:', text);
-                    } catch (err) {
-                        resultDiv.textContent += '\nError parsing response.';
-                    }
-                })
-                .catch(error => {
-                    resultDiv.textContent = 'Error: ' + error.message;
-                    console.error('Test error:', error);
-                });
-    });
-  </script>
-</div>
+<!-- Test form removed from the bottom; use the in-page test area or developer tools to run test POSTs -->
