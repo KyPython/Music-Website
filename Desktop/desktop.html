@@ -66,7 +66,7 @@
                 <h3 class="feature-title">Exclusive Access</h3>
                 <p class="feature-description">Get unreleased songs and early access.</p>
             </div>
-            <form id="newsletter-form" class="newsletter-form zoho-form" onsubmit="event.preventDefault();">
+            <form id="newsletter-form" class="newsletter-form zoho-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
                 <input type="email" id="newsletter-email" name="Email" class="newsletter-input" placeholder="Your Email Here" required>
                 <button type="submit" class="btn btn-secondary">Subscribe</button>
             </form>
@@ -83,7 +83,7 @@
             </div>
         </div>
         
-                    <form id="contact-form" class="contact-form zoho-form" onsubmit="event.preventDefault();">
+                    <form id="contact-form" class="contact-form zoho-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstName">First Name</label>
@@ -209,7 +209,7 @@
                 <div class="footer-newsletter">
                     <h4 class="footer-heading">Subscribe</h4>
                     <p class="footer-text">Join my newsletter for the latest updates on my music and events.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault();">
+                    <form class="newsletter-form" onsubmit="if(!this.dataset.jsAttached) event.preventDefault();">
                         <input type="email" placeholder="Your Email Here" class="newsletter-input" id="footer-email">
                         <button type="submit" class="btn btn-secondary">Join</button>
                     </form>
@@ -347,6 +347,7 @@
                     alert('Connection error. Please try again later.');
                 }
             });
+            try { newsletterForm.dataset.jsAttached = '1'; } catch(e){}
         }
 
         // Footer newsletter form
@@ -388,6 +389,7 @@
                     alert('Connection error. Please try again later.');
                 }
             });
+            try { footerForm.dataset.jsAttached = '1'; } catch(e){}
         }
 
         // Contact form
@@ -448,6 +450,7 @@
                     alert('Connection error. Please try again later.');
                 }
             });
+            try { contactForm.dataset.jsAttached = '1'; } catch(e){}
         }
 
         // If you have a separate Zoho integration function, call it here

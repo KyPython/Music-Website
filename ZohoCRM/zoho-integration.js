@@ -119,6 +119,7 @@
     document.querySelectorAll('form.zoho-form').forEach(f => {
       f.removeEventListener('submit', handleSubmit);
       f.addEventListener('submit', handleSubmit);
+      try { f.dataset.jsAttached = '1'; } catch (e) {}
     });
   }
 
