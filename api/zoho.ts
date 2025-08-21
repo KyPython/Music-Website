@@ -130,6 +130,15 @@ async function createZohoLead(accessToken: string, leadData: any) {
 }
 
 export default async function handler(req: any, res: any) {
+  // Debug: log incoming request
+  try {
+    console.log('ZohoAPI: Incoming request', {
+      method: req.method,
+      url: req.url,
+      headers: Object.assign({}, req.headers, { authorization: undefined }), // hide auth
+      body: req.body
+    });
+  } catch (e) { console.error('ZohoAPI: Error logging request', e); }
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -153,6 +162,10 @@ export default async function handler(req: any, res: any) {
     }
   } catch (rlErr) {
     console.warn('Rate limiter error', rlErr);
+    // Debug: log payload to Zoho
+    try {
+      console.log('ZohoAPI: Lead payload', req.body.leadData);
+    } catch (e) { console.error('ZohoAPI: Error logging lead payload', e); }
   }
   try {
     const { action, leadData, recaptchaToken } = req.body || {};
@@ -166,8 +179,18 @@ export default async function handler(req: any, res: any) {
       if (!recaptchaToken) {
         res.status(400).json({ error: 'Missing recaptchaToken' });
         return;
+        // Debug: log Zoho API response
+        try {
+          console.log('ZohoAPI: Zoho response', {
+            status: zohoResp.status,
+            statusText: zohoResp.statusText,
+            body: zohoJson
+          });
+        } catch (e) { console.error('ZohoAPI: Error logging Zoho response', e); }
       }
       try {
+      // Debug: log error
+      console.error('ZohoAPI: Error during lead creation', err);
         const r = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
