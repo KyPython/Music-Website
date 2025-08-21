@@ -97,9 +97,10 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET || '';
         // Map inquiry type and message robustly
         const inquiryType = leadData.lead_type || leadData.Industry || leadData.inquiry_type || '';
         const message = leadData.Description || leadData.message || leadData.Message || '';
-        const firstName = leadData.First_Name || leadData.first_name || leadData.fname || '';
-        const lastName = leadData.Last_Name || leadData.last_name || leadData.lname || '';
-        const company = leadData.Company || leadData.company || `${firstName} ${lastName}`.trim() || 'Individual';
+      const firstName = leadData.First_Name || leadData.first_name || leadData.fname || '';
+      let lastName = leadData.Last_Name || leadData.last_name || leadData.lname || '';
+      if (!lastName || lastName.trim() === '') lastName = 'Unknown';
+      const company = leadData.Company || leadData.company || `${firstName} ${lastName}`.trim() || 'Individual';
 
         // Construct Zoho payload
         const zohoPayload = {
