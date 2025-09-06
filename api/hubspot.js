@@ -18,11 +18,18 @@ export default async function handler(req, res) {
     // Get HubSpot API key from environment variables
     const hubspotApiKey = process.env.HUBSPOT_API_KEY;
     
+    console.log('HubSpot API Key present:', hubspotApiKey ? 'YES' : 'NO');
+    console.log('HubSpot API Key length:', hubspotApiKey ? hubspotApiKey.length : 0);
+    
     if (!hubspotApiKey) {
+        console.error('Missing HUBSPOT_API_KEY environment variable');
         return res.status(500).json({ error: 'Configuration error - API key not found' });
     }
     
     const { action, leadData } = req.body;
+    
+    console.log('Request action:', action);
+    console.log('Request leadData:', JSON.stringify(leadData, null, 2));
     
     if (!action || !leadData) {
         return res.status(400).json({ error: 'Invalid request - missing action or leadData' });
@@ -69,9 +76,14 @@ export default async function handler(req, res) {
         
         const responseData = await response.json();
         
+        // Log everything for debugging
+        console.log('HubSpot Response Status:', response.status);
+        console.log('HubSpot Response Data:', JSON.stringify(responseData, null, 2));
+        
         if (!response.ok) {
             // Handle duplicate contact (conflict)
             if (response.status === 409) {
+                console.log('Contact already exists - returning duplicate status');
                 return res.status(200).json({
                     status: 'duplicate',
                     message: 'Contact already exists'
@@ -81,14 +93,18 @@ export default async function handler(req, res) {
             console.error('HubSpot API Error:', responseData);
             return res.status(500).json({
                 error: 'Failed to create contact',
-                details: responseData
+                details: responseData,
+                hubspotStatus: response.status,
+                debug: 'Check Vercel function logs for details'
             });
         }
         
+        console.log('Contact created successfully in HubSpot');
         return res.status(200).json({
             status: 'success',
             message: 'Contact created successfully',
-            data: responseData
+            data: responseData,
+            debug: 'Check Vercel function logs for details'
         });
         
     } catch (error) {
