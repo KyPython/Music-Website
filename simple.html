@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>Apollo Music Website</h1>
+    
+    <form id="test-form">
+        <input type="email" id="email" placeholder="Enter email" required>
+        <button type="submit">Subscribe</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('test-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const response = await fetch('/api/hubspot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'createLead',
+                        leadData: {
+                            Email: email,
+                            Last_Name: 'Test Subscriber',
+                            Lead_Source: 'Website Newsletter'
+                        }
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.status === 'success') {
+                    resultDiv.innerHTML = '<p style="color: green;">Success! Contact created in HubSpot!</p>';
+                    this.reset();
+                } else if (result.status === 'duplicate') {
+                    resultDiv.innerHTML = '<p style="color: orange;">Already subscribed!</p>';
+                } else {
+                    resultDiv.innerHTML = '<p style="color: red;">Error: ' + (result.error || 'Unknown error') + '</p>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<p style="color: red;">Connection error: ' + error.message + '</p>';
+            }
+        });
+    </script>
+</body>
+</html>
