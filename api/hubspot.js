@@ -40,45 +40,19 @@ export default async function handler(req, res) {
     }
     
     try {
-        // Map fields from your form to HubSpot format
+        // Map fields from your form to HubSpot format - MINIMAL VERSION
         const hubspotProperties = {};
         
+        // Only use the most basic fields that definitely exist
         if (leadData.Email) hubspotProperties.email = leadData.Email;
         if (leadData.First_Name) hubspotProperties.firstname = leadData.First_Name;
         if (leadData.Last_Name) hubspotProperties.lastname = leadData.Last_Name;
         if (leadData.Phone) hubspotProperties.phone = leadData.Phone;
         
-        // Use a simple notes field that definitely exists
-        if (leadData.Description) {
-            hubspotProperties.hs_additional_emails = leadData.Description; // Use as temporary storage
-        }
+        // Only set lifecyclestage - most basic field
+        hubspotProperties.lifecyclestage = 'lead';
         
-        if (leadData.Lead_Source) {
-            hubspotProperties.hs_lead_status = 'NEW';
-            // Use lifecyclestage instead of custom lead_source 
-            hubspotProperties.lifecyclestage = 'lead';
-            // Map lead sources to valid HubSpot options  
-            const sourceMapping = {
-                'API Test': 'OTHER_CAMPAIGNS',
-                'Website Newsletter': 'DIRECT_TRAFFIC', 
-                'Website Contact Form': 'DIRECT_TRAFFIC',
-                'Contact Form': 'DIRECT_TRAFFIC'
-            };
-            hubspotProperties.hs_analytics_source = sourceMapping[leadData.Lead_Source] || 'DIRECT_TRAFFIC';
-        }
-        
-        if (leadData.Industry) {
-            // Use job title field which definitely exists
-            const inquiryMapping = {
-                'artist': 'Artist Inquiry',
-                'booking': 'Booking Request', 
-                'fan': 'Fan Message',
-                'collab': 'Collaboration Idea',
-                'inquiry': 'Other Inquiry',
-                'other': 'Other'
-            };
-            hubspotProperties.jobtitle = inquiryMapping[leadData.Industry] || leadData.Industry;
-        }
+        console.log('Sending minimal HubSpot properties:', JSON.stringify(hubspotProperties, null, 2));
         
         // Create contact in HubSpot
         const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
