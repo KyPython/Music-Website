@@ -40,19 +40,42 @@ export default async function handler(req, res) {
     }
     
     try {
-        // Map fields from your form to HubSpot format - MINIMAL VERSION
+        // Map fields from your form to HubSpot format
         const hubspotProperties = {};
         
-        // Only use the most basic fields that definitely exist
+        // Basic contact fields
         if (leadData.Email) hubspotProperties.email = leadData.Email;
         if (leadData.First_Name) hubspotProperties.firstname = leadData.First_Name;
         if (leadData.Last_Name) hubspotProperties.lastname = leadData.Last_Name;
         if (leadData.Phone) hubspotProperties.phone = leadData.Phone;
         
-        // Only set lifecyclestage - most basic field
+        // Set lead properties
         hubspotProperties.lifecyclestage = 'lead';
+        hubspotProperties.hs_lead_status = 'NEW';
         
-        console.log('Sending minimal HubSpot properties:', JSON.stringify(hubspotProperties, null, 2));
+        // Add inquiry type to job title field
+        if (leadData.Industry) {
+            const inquiryMapping = {
+                'artist': 'Artist Inquiry',
+                'booking': 'Booking Request', 
+                'fan': 'Fan Message',
+                'collab': 'Collaboration Idea',
+                'inquiry': 'Other Inquiry',
+                'other': 'Other'
+            };
+            hubspotProperties.jobtitle = inquiryMapping[leadData.Industry] || leadData.Industry;
+        }
+        
+        // Add message to notes field (this is the standard notes field)
+        if (leadData.Description) {
+            hubspotProperties.notes_last_updated = leadData.Description;
+        }
+        
+        // Set source to identify it's from Music Website
+        hubspotProperties.hs_analytics_source = 'DIRECT_TRAFFIC';
+        hubspotProperties.hs_analytics_source_data_1 = 'Music Website Contact Form';
+        
+        console.log('Sending HubSpot properties:', JSON.stringify(hubspotProperties, null, 2));
         
         // Create contact in HubSpot
         const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
