@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "Music website with HubSpot CRM integration",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'No build step required'",
-    "start": "echo 'Static site - no start command needed'"
+    "dev": "vercel dev"
   },
   "dependencies": {},
   "devDependencies": {},
