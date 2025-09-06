@@ -285,7 +285,6 @@
     </div>
 
     <script src="desktop.js"></script>
-    <script src="../Zoho CRM/zoho-integration.js"></script>
     <script>
         // Close modals when clicking outside
         window.onclick = function(event) {
@@ -303,169 +302,156 @@
             }
         });
         
-        // Initialize Zoho CRM integration
+        // Initialize HubSpot CRM integration
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Initializing Zoho CRM integration...');
+            console.log('Initializing HubSpot CRM integration...');
             
-            // Remove any existing event listeners from newsletter forms
-            const newsletterForms = document.querySelectorAll('form.newsletter-form');
-            newsletterForms.forEach(form => {
-                const newForm = form.cloneNode(true);
-                form.parentNode.replaceChild(newForm, form);
-            });
-            
-            // Initialize Zoho CRM integration
-            if (typeof initZohoCRMIntegration === 'function') {
-                initZohoCRMIntegration();
-                console.log('Zoho CRM integration initialized');
-            } else {
-                console.error('Zoho CRM integration function not found');
+            // Newsletter form in main content
+            const newsletterForm = document.getElementById('newsletter-form');
+            if (newsletterForm) {
+                newsletterForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('newsletter-email').value;
+                    
+                    try {
+                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    Email: email,
+                                    Last_Name: 'Newsletter Subscriber',
+                                    Lead_Source: 'Website Newsletter',
+                                    Description: 'Subscribed to newsletter from main form'
+                                }
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok && result.status === 'success') {
+                            alert('Thank you for subscribing!');
+                            this.reset();
+                        } else if (result.status === 'duplicate') {
+                            alert('You\'re already subscribed! Thank you for your interest.');
+                        } else {
+                            console.error('HubSpot error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
+                    }
+                });
             }
-        
-        // Newsletter form in main content
-        const newsletterForm = document.getElementById('newsletter-form');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const email = document.getElementById('newsletter-email').value;
-                
-                try {
-                    const response = await fetch('../Zoho CRM/zoho-proxy.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            action: 'createLead',
-                            leadData: {
-                                Email: email,
-                                Last_Name: 'Newsletter Subscriber',
-                                Lead_Source: 'Website Newsletter',
-                                Description: 'Subscribed to newsletter from main form'
-                            }
-                        })
-                    });
+            
+            // Footer newsletter form
+            const footerForm = document.querySelector('.footer-newsletter .newsletter-form');
+            if (footerForm) {
+                footerForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const email = document.getElementById('footer-email').value;
                     
-                    const result = await response.json();
-                    
-                    if (response.ok) {
-                        alert('Thank you for subscribing!');
-                        this.reset();
-                    } else {
-                        console.error('Zoho error:', result);
-                        alert('There was an error. Please try again later.');
+                    try {
+                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    Email: email,
+                                    Last_Name: 'Footer Subscriber',
+                                    Lead_Source: 'Website Footer',
+                                    Description: 'Subscribed to newsletter from footer form'
+                                }
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok && result.status === 'success') {
+                            alert('Thank you for subscribing!');
+                            this.reset();
+                        } else if (result.status === 'duplicate') {
+                            alert('You\'re already subscribed! Thank you for your interest.');
+                        } else {
+                            console.error('HubSpot error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
                     }
-                } catch (error) {
-                    console.error('Submission error:', error);
-                    alert('Connection error. Please try again later.');
-                }
-            });
-        }
-        
-        // Footer newsletter form
-        const footerForm = document.querySelector('.footer-newsletter .newsletter-form');
-        if (footerForm) {
-            footerForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const email = document.getElementById('footer-email').value;
-                
-                try {
-                    const response = await fetch('../Zoho CRM/zoho-proxy.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            action: 'createLead',
-                            leadData: {
-                                Email: email,
-                                Last_Name: 'Footer Subscriber',
-                                Lead_Source: 'Website Footer',
-                                Description: 'Subscribed to newsletter from footer form'
-                            }
-                        })
-                    });
+                });
+            }
+            
+            // Contact form
+            const contactForm = document.getElementById('contact-form');
+            if (contactForm) {
+                contactForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
                     
-                    const result = await response.json();
+                    // Get form values
+                    const firstName = document.getElementById('firstName').value;
+                    const lastName = document.getElementById('lastName').value;
+                    const email = document.getElementById('email').value;
+                    const phone = document.getElementById('phone').value;
+                    const message = document.getElementById('message').value;
                     
-                    if (response.ok) {
-                        alert('Thank you for subscribing!');
-                        this.reset();
-                    } else {
-                        console.error('Zoho error:', result);
-                        alert('There was an error. Please try again later.');
+                    // Get selected inquiry type
+                    let inquiryType = '';
+                    const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]');
+                    for (const input of inquiryInputs) {
+                        if (input.checked) {
+                            inquiryType = input.value;
+                            break;
+                        }
                     }
-                } catch (error) {
-                    console.error('Submission error:', error);
-                    alert('Connection error. Please try again later.');
-                }
-            });
-        }
-        
-        // Contact form
-        const contactForm = document.getElementById('contact-form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                // Get form values
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const message = document.getElementById('message').value;
-                
-                // Get selected inquiry type
-                let inquiryType = '';
-                const inquiryInputs = document.querySelectorAll('input[name="inquiry-type"]');
-                for (const input of inquiryInputs) {
-                    if (input.checked) {
-                        inquiryType = input.value;
-                        break;
-                    }
-                }
-                
-                try {
-                    const response = await fetch('../Zoho CRM/zoho-proxy.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            action: 'createLead',
-                            leadData: {
-                                First_Name: firstName,
-                                Last_Name: lastName,
-                                Email: email,
-                                Phone: phone,
-                                Description: message,
-                                Lead_Source: 'Website Contact Form',
-                                Industry: inquiryType // Using Industry field for inquiry type
-                            }
-                        })
-                    });
                     
-                    const result = await response.json();
-                    
-                    if (response.ok) {
-                        alert('Thank you for your message! I\'ll get back to you soon.');
-                        this.reset();
-                    } else {
-                        console.error('Zoho error:', result);
-                        alert('There was an error. Please try again later.');
+                    try {
+                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                action: 'createLead',
+                                leadData: {
+                                    First_Name: firstName,
+                                    Last_Name: lastName,
+                                    Email: email,
+                                    Phone: phone,
+                                    Description: message,
+                                    Lead_Source: 'Website Contact Form',
+                                    Industry: inquiryType
+                                }
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (response.ok && result.status === 'success') {
+                            alert('Thank you for your message! I\'ll get back to you soon.');
+                            this.reset();
+                        } else if (result.status === 'duplicate') {
+                            alert('I already have your contact information! Your message has been updated.');
+                        } else {
+                            console.error('HubSpot error:', result);
+                            alert('There was an error. Please try again later.');
+                        }
+                    } catch (error) {
+                        console.error('Submission error:', error);
+                        alert('Connection error. Please try again later.');
                     }
-                } catch (error) {
-                    console.error('Submission error:', error);
-                    alert('Connection error. Please try again later.');
-                }
-            });
-        }
-        
-        // If you have a separate Zoho integration function, call it here
-        if (typeof initZohoCRMIntegration === 'function') {
-            initZohoCRMIntegration();
-            console.log('Additional Zoho CRM integration initialized');
-        }
+                });
+            }
+            
+            console.log('HubSpot CRM integration initialized successfully');
         });
     </script>
 

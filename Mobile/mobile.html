@@ -273,7 +273,6 @@
     </div>
 
     <script src="desktop.js"></script>
-    <script src="../Zoho CRM/zoho-integration.js"></script>
     <script>
         // Mobile Navigation Toggle
         const navToggle = document.querySelector('.nav-toggle');
@@ -300,27 +299,20 @@
         // Close modals with ESC key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                document.querySelectorAll('.modal.active, .modal:not(.hidden)').forEach(function(modal) { // Ensure only visible modals are targeted
+                document.querySelectorAll('.modal.active, .modal:not(.hidden)').forEach(function(modal) {
                     modal.style.display = 'none';
-                    if (modal.classList.contains('active')) { // If using 'active' class for visibility
+                    if (modal.classList.contains('active')) {
                         modal.classList.remove('active');
                     }
                 });
             }
         });
         
-        // Initialize Zoho CRM integration
+        // Initialize HubSpot CRM integration
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Initializing Zoho CRM integration for mobile...');
+            console.log('Initializing HubSpot CRM integration for mobile...');
             
-            // Remove any existing event listeners from newsletter forms (cloneNode trick)
-            const newsletterForms = document.querySelectorAll('form.newsletter-form');
-            newsletterForms.forEach(form => {
-                const newForm = form.cloneNode(true);
-                form.parentNode.replaceChild(newForm, form);
-            });
-            
-            // Re-attach event listeners to the new forms
+            // Re-attach event listeners to the forms
             const mainNewsletterForm = document.getElementById('newsletter-form');
             if (mainNewsletterForm) {
                 mainNewsletterForm.addEventListener('submit', handleNewsletterSubmit);
@@ -334,26 +326,20 @@
                 contactForm.addEventListener('submit', handleContactFormSubmit);
             }
 
-            // Initialize Zoho CRM integration function if it exists
-            if (typeof initZohoCRMIntegration === 'function') {
-                initZohoCRMIntegration();
-                console.log('Zoho CRM integration initialized');
-            } else {
-                console.error('Zoho CRM integration function not found');
-            }
+            console.log('HubSpot CRM integration initialized successfully for mobile');
         });
 
         async function handleNewsletterSubmit(e) {
             e.preventDefault();
             const emailInput = this.querySelector('input[type="email"]');
             const email = emailInput.value;
-            const formId = this.id || 'footer-newsletter-form'; // Differentiate source
+            const formId = this.id || 'footer-newsletter-form';
             const lastName = formId === 'newsletter-form' ? 'Newsletter Subscriber' : 'Footer Subscriber';
             const leadSource = formId === 'newsletter-form' ? 'Website Newsletter' : 'Website Footer';
             const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
 
             try {
-                const response = await fetch('../Zoho CRM/zoho-proxy.php', {
+                const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -362,11 +348,13 @@
                     })
                 });
                 const result = await response.json();
-                if (response.ok) {
+                if (response.ok && result.status === 'success') {
                     alert('Thank you for subscribing!');
                     this.reset();
+                } else if (result.status === 'duplicate') {
+                    alert('You\'re already subscribed! Thank you for your interest.');
                 } else {
-                    console.error('Zoho error:', result);
+                    console.error('HubSpot error:', result);
                     alert('There was an error. Please try again later.');
                 }
             } catch (error) {
@@ -395,7 +383,7 @@
             }
 
             try {
-                const response = await fetch('../Zoho CRM/zoho-proxy.php', {
+                const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -407,11 +395,13 @@
                     })
                 });
                 const result = await response.json();
-                if (response.ok) {
+                if (response.ok && result.status === 'success') {
                     alert('Thank you for your message! I\'ll get back to you soon.');
                     this.reset();
+                } else if (result.status === 'duplicate') {
+                    alert('I already have your contact information! Your message has been updated.');
                 } else {
-                    console.error('Zoho error:', result);
+                    console.error('HubSpot error:', result);
                     alert('There was an error. Please try again later.');
                 }
             } catch (error) {

@@ -16,16 +16,25 @@
         // Global initialization flag
         let initialized = false;
         
+        // Function to detect if user is on mobile device
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   window.innerWidth <= 768;
+        }
+        
         // Function to initialize the page
         function initializePage() {
             console.log('Initializing page');
-            // Only load the main desktop.html initially
             loadMainContent();
         }
         
         function loadMainContent() {
-            console.log('Loading main content...');
-            fetch('./Desktop/desktop.html')
+            const mobile = isMobile();
+            const contentPath = mobile ? './Mobile/mobile.html' : './Desktop/desktop.html';
+            const deviceType = mobile ? 'mobile' : 'desktop';
+            
+            console.log(`Loading ${deviceType} content...`);
+            fetch(contentPath)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -41,20 +50,23 @@
                     
                     // Modify the links in the parsed HTML before adding to the page
                     const legalLinks = tempDiv.querySelectorAll('.legal-links a');
+                    const pathPrefix = mobile ? './Mobile/' : './Desktop/';
+                    const suffix = mobile ? '-mobile.html' : '.html';
+                    
                     legalLinks.forEach(link => {
                         const linkText = link.textContent.trim();
                         if (linkText === 'Privacy Policy') {
-                            link.setAttribute('href', './Desktop/privacy-policy.html');
+                            link.setAttribute('href', pathPrefix + 'privacy-policy' + suffix);
                             link.setAttribute('target', '_self');
                             link.removeAttribute('onclick');
                             link.removeAttribute('data-modal');
                         } else if (linkText === 'Terms of Service') {
-                            link.setAttribute('href', './Desktop/terms-of-service.html');
+                            link.setAttribute('href', pathPrefix + 'terms-of-service' + suffix);
                             link.setAttribute('target', '_self');
                             link.removeAttribute('onclick');
                             link.removeAttribute('data-modal');
                         } else if (linkText === 'Cookie Settings') {
-                            link.setAttribute('href', './Desktop/cookie-settings.html');
+                            link.setAttribute('href', pathPrefix + 'cookie-settings' + suffix);
                             link.setAttribute('target', '_self');
                             link.removeAttribute('onclick');
                             link.removeAttribute('data-modal');
