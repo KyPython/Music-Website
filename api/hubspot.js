@@ -66,14 +66,15 @@ export default async function handler(req, res) {
             hubspotProperties.jobtitle = inquiryMapping[leadData.Industry] || leadData.Industry;
         }
         
-        // Add message to notes field (this is the standard notes field)
+        // Add message to notes field - use the basic notes field
         if (leadData.Description) {
-            hubspotProperties.notes_last_updated = leadData.Description;
+            hubspotProperties.hs_notes_last_contacted = leadData.Description;
         }
         
-        // Set source to identify it's from Music Website
-        hubspotProperties.hs_analytics_source = 'DIRECT_TRAFFIC';
-        hubspotProperties.hs_analytics_source_data_1 = 'Music Website Contact Form';
+        // Set custom source to identify it's from Music Website
+        hubspotProperties.hs_analytics_source = 'OTHER_CAMPAIGNS';
+        hubspotProperties.hs_analytics_source_data_1 = 'Music Website';
+        hubspotProperties.hs_analytics_source_data_2 = 'Contact Form';
         
         console.log('Sending HubSpot properties:', JSON.stringify(hubspotProperties, null, 2));
         
