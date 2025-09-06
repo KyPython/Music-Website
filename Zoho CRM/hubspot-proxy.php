@@ -81,8 +81,8 @@ if (empty($hubspotApiKey)) {
 function createContact($apiKey, $contactData) {
     logDebug("Creating contact", $contactData);
     
-    // HubSpot API endpoint for creating contacts
-    $url = "https://api.hubapi.com/crm/v3/objects/contacts?hapikey=" . $apiKey;
+    // HubSpot API endpoint for creating contacts (using Authorization header for Private Apps)
+    $url = "https://api.hubapi.com/crm/v3/objects/contacts";
     
     // Map fields from Zoho-style to HubSpot format
     $hubspotProperties = [];
@@ -101,11 +101,12 @@ function createContact($apiKey, $contactData) {
         $hubspotProperties['phone'] = $contactData['Phone'];
     }
     if (isset($contactData['Description'])) {
-        $hubspotProperties['notes_last_contacted'] = $contactData['Description'];
+        // Use a simple notes field that exists
+        $hubspotProperties['notes'] = $contactData['Description'];
     }
     if (isset($contactData['Lead_Source'])) {
         $hubspotProperties['hs_lead_status'] = 'NEW';
-        $hubspotProperties['lead_source'] = $contactData['Lead_Source'];
+        $hubspotProperties['hs_analytics_source'] = $contactData['Lead_Source'];
     }
     if (isset($contactData['Industry'])) {
         $hubspotProperties['jobtitle'] = $contactData['Industry']; // Using jobtitle to store inquiry type
@@ -126,7 +127,8 @@ function createContact($apiKey, $contactData) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json'
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $apiKey
     ]);
     
     // Execute the request

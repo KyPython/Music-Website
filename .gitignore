@@ -27,3 +27,6 @@ Thumbs.db
 # Build files
 /dist
 /build
+
+# Credentials (keep private)
+Zoho CRM/credentials.php
