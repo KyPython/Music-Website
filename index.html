@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ky - Music Artist</title>
     <link rel="stylesheet" href="./Desktop/desktop.css">
+    <link rel="stylesheet" href="./Mobile/mobile.css">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=BioRhyme&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -84,6 +85,9 @@
                     // Now add the modified HTML to the page
                     document.getElementById('content-container').innerHTML = tempDiv.innerHTML;
                     
+                    // Ensure CSS is loaded for the dynamically loaded content
+                    ensureStylesLoaded(mobile);
+                    
                     // Disable any JavaScript that might be interfering with links
                     disableInterfereingScripts();
                 })
@@ -92,6 +96,33 @@
                     document.getElementById('content-container').innerHTML = 
                         `<p class="error-message">Error loading content: ${error.message}</p>`;
                 });
+        }
+        
+        function ensureStylesLoaded(isMobile) {
+            // Check if device-specific CSS is loaded
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            let hasDesktopCSS = false;
+            let hasMobileCSS = false;
+            
+            links.forEach(link => {
+                if (link.href.includes('desktop.css')) hasDesktopCSS = true;
+                if (link.href.includes('mobile.css')) hasMobileCSS = true;
+            });
+            
+            // Load missing CSS if needed
+            if (!hasDesktopCSS) {
+                const desktopCSS = document.createElement('link');
+                desktopCSS.rel = 'stylesheet';
+                desktopCSS.href = './Desktop/desktop.css';
+                document.head.appendChild(desktopCSS);
+            }
+            
+            if (!hasMobileCSS && isMobile) {
+                const mobileCSS = document.createElement('link');
+                mobileCSS.rel = 'stylesheet';
+                mobileCSS.href = './Mobile/mobile.css';
+                document.head.appendChild(mobileCSS);
+            }
         }
         
         function disableInterfereingScripts() {
