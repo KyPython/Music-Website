@@ -461,12 +461,52 @@ const ContactSection: React.FC = () => {
                         >
                           {info.description}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "primary.main" }}
-                        >
-                          {info.value}
-                        </Typography>
+                        {info.title === 'Email' ? (
+                          <Button
+                            variant="text"
+                            href={`mailto:${info.value}`}
+                            sx={{ 
+                              color: "primary.main",
+                              p: 0,
+                              minWidth: 'auto',
+                              textTransform: 'none',
+                              fontSize: 'inherit',
+                              fontWeight: 400,
+                              '&:hover': {
+                                background: 'none',
+                                textDecoration: 'underline'
+                              }
+                            }}
+                          >
+                            {info.value}
+                          </Button>
+                        ) : info.title === 'Phone' ? (
+                          <Button
+                            variant="text"
+                            href={`tel:${info.value}`}
+                            sx={{ 
+                              color: "primary.main",
+                              p: 0,
+                              minWidth: 'auto',
+                              textTransform: 'none',
+                              fontSize: 'inherit',
+                              fontWeight: 400,
+                              '&:hover': {
+                                background: 'none',
+                                textDecoration: 'underline'
+                              }
+                            }}
+                          >
+                            {info.value}
+                          </Button>
+                        ) : (
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "primary.main" }}
+                          >
+                            {info.value}
+                          </Typography>
+                        )}
                       </Box>
                     </Stack>
                   </CardContent>
