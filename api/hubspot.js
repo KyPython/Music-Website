@@ -47,10 +47,16 @@ export default async function handler(req, res) {
         if (leadData.First_Name) hubspotProperties.firstname = leadData.First_Name;
         if (leadData.Last_Name) hubspotProperties.lastname = leadData.Last_Name;
         if (leadData.Phone) hubspotProperties.phone = leadData.Phone;
-        if (leadData.Description) hubspotProperties.notes_last_contacted = leadData.Description;
+        
+        // Use a simple notes field that definitely exists
+        if (leadData.Description) {
+            hubspotProperties.hs_additional_emails = leadData.Description; // Use as temporary storage
+        }
+        
         if (leadData.Lead_Source) {
             hubspotProperties.hs_lead_status = 'NEW';
-            hubspotProperties.lead_source = 'Music Website';
+            // Use lifecyclestage instead of custom lead_source 
+            hubspotProperties.lifecyclestage = 'lead';
             // Map lead sources to valid HubSpot options  
             const sourceMapping = {
                 'API Test': 'OTHER_CAMPAIGNS',
@@ -60,8 +66,9 @@ export default async function handler(req, res) {
             };
             hubspotProperties.hs_analytics_source = sourceMapping[leadData.Lead_Source] || 'DIRECT_TRAFFIC';
         }
+        
         if (leadData.Industry) {
-            // Map inquiry types to more descriptive values
+            // Use job title field which definitely exists
             const inquiryMapping = {
                 'artist': 'Artist Inquiry',
                 'booking': 'Booking Request', 
@@ -70,7 +77,7 @@ export default async function handler(req, res) {
                 'inquiry': 'Other Inquiry',
                 'other': 'Other'
             };
-            hubspotProperties.industry = inquiryMapping[leadData.Industry] || leadData.Industry;
+            hubspotProperties.jobtitle = inquiryMapping[leadData.Industry] || leadData.Industry;
         }
         
         // Create contact in HubSpot
