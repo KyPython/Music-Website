@@ -309,12 +309,15 @@
             // Newsletter form in main content
             const newsletterForm = document.getElementById('newsletter-form');
             if (newsletterForm) {
+                console.log('Found newsletter form:', newsletterForm);
                 newsletterForm.addEventListener('submit', async function(e) {
+                    console.log('Newsletter form submitted!');
                     e.preventDefault();
+                    e.stopPropagation();
                     const email = document.getElementById('newsletter-email').value;
                     
                     try {
-                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                        const response = await fetch('./Zoho CRM/hubspot-proxy.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -351,12 +354,15 @@
             // Footer newsletter form
             const footerForm = document.querySelector('.footer-newsletter .newsletter-form');
             if (footerForm) {
+                console.log('Found footer form:', footerForm);
                 footerForm.addEventListener('submit', async function(e) {
+                    console.log('Footer form submitted!');
                     e.preventDefault();
+                    e.stopPropagation();
                     const email = document.getElementById('footer-email').value;
                     
                     try {
-                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                        const response = await fetch('./Zoho CRM/hubspot-proxy.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -393,8 +399,11 @@
             // Contact form
             const contactForm = document.getElementById('contact-form');
             if (contactForm) {
+                console.log('Found contact form:', contactForm);
                 contactForm.addEventListener('submit', async function(e) {
+                    console.log('Contact form submitted!');
                     e.preventDefault();
+                    e.stopPropagation();
                     
                     // Get form values
                     const firstName = document.getElementById('firstName').value;
@@ -414,7 +423,7 @@
                     }
                     
                     try {
-                        const response = await fetch('../Zoho CRM/hubspot-proxy.php', {
+                        const response = await fetch('./Zoho CRM/hubspot-proxy.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -461,51 +470,3 @@
 </body>
 </html>
 
-<!-- Add this test form somewhere on your page for debugging -->
-<div style="margin-top: 50px; padding: 20px; border: 1px solid #ccc;">
-  <h3>Test Zoho Integration</h3>
-  <form id="test-zoho-form">
-    <input type="email" placeholder="Test Email" value="test@example.com">
-    <button type="submit">Test Zoho</button>
-    <div id="test-result" style="margin-top: 10px;"></div>
-  </form>
-  
-  <script>
-    document.getElementById('test-zoho-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const resultDiv = document.getElementById('test-result');
-      resultDiv.textContent = 'Testing...';
-      
-      const email = this.querySelector('input[type="email"]').value;
-      
-      // Try with a simple fetch to the PHP file
-      fetch('/Zoho CRM/zoho-proxy.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          action: 'createLead',
-          leadData: {
-            Email: email,
-            Last_Name: 'Test User',
-            Lead_Source: 'Test Form',
-            Description: 'Testing Zoho integration'
-          }
-        })
-      })
-      .then(response => {
-        resultDiv.textContent = 'Response status: ' + response.status;
-        return response.text();
-      })
-      .then(text => {
-        resultDiv.textContent += '\nResponse: ' + text;
-        console.log('Test response:', text);
-      })
-      .catch(error => {
-        resultDiv.textContent = 'Error: ' + error.message;
-        console.error('Test error:', error);
-      });
-    });
-  </script>
-</div>

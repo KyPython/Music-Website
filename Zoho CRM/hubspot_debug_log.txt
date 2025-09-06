@@ -1,0 +1,7 @@
+2025-09-06 16:03:36 - Script started
+2025-09-06 16:03:36 - Request method: POST
+2025-09-06 16:03:36 - Request URI: /test
+2025-09-06 16:03:36 - Loaded credentials from file
+2025-09-06 16:03:36 - Raw request body - ""
+2025-09-06 16:03:36 - Parsed request data
+2025-09-06 16:03:36 - Invalid request: missing action
