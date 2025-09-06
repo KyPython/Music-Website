@@ -1,2 +1,0 @@
-2025-09-06 15:51:27 - Starting contact migration from Zoho to HubSpot
-2025-09-06 15:51:27 - Migration failed: Failed to get Zoho access token: {"error":"invalid_client"}
