@@ -71,8 +71,8 @@ export default async function handler(req, res) {
             hubspotProperties.company = `Message: ${leadData.Description}`;
         }
         
-        // Set source - use the working combination
-        hubspotProperties.hs_analytics_source = 'OTHER_CAMPAIGNS';
+        // Use lead source field which is editable (not original source)
+        hubspotProperties.leadsource = 'Music Website';
         
         console.log('Sending HubSpot properties:', JSON.stringify(hubspotProperties, null, 2));
         
