@@ -43,7 +43,7 @@
     </div>
     <div class="content">
         <div class="post-card">
-            <img src="https://via.placeholder.com/280x150/333333/FFFFFF?text=Coming%2BSoon" alt="Latest Album" class="post-image"> <!-- Adjusted placeholder size for mobile -->
+            <img src="https://via.placeholder.com/280x150/333333/FFFFFF?text=Coming+Soon" alt="Latest Album" class="post-image"> <!-- Adjusted placeholder size for mobile -->
             <div class="post-details">
                 <div class="post-text">
                     <h4 class="post-title">Latest Album</h4>
@@ -338,7 +338,7 @@
             const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
 
             try {
-                const response = await fetch('./Zoho CRM/hubspot-proxy.php', {
+                const response = await fetch('./api.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -382,7 +382,7 @@
             }
 
             try {
-                const response = await fetch('./Zoho CRM/hubspot-proxy.php', {
+                const response = await fetch('./api.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

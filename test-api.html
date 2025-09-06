@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API</title>
+</head>
+<body>
+    <h1>Test HubSpot API</h1>
+    
+    <button id="test-api" onclick="testAPI()">Test API Connection</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; background: #f5f5f5;"></div>
+    
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing API...';
+            
+            try {
+                console.log('Testing API at: ./api.php');
+                
+                const response = await fetch('./api.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'createLead',
+                        leadData: {
+                            Email: 'test-' + Date.now() + '@example.com',
+                            First_Name: 'Test',
+                            Last_Name: 'User',
+                            Lead_Source: 'API Test',
+                            Description: 'Testing API connection'
+                        }
+                    })
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                resultDiv.innerHTML = `
+                    <h3>API Response:</h3>
+                    <p><strong>Status:</strong> ${response.status}</p>
+                    <p><strong>Status Text:</strong> ${response.statusText}</p>
+                    <p><strong>Response:</strong></p>
+                    <pre>${text}</pre>
+                `;
+                
+                if (response.ok) {
+                    try {
+                        const result = JSON.parse(text);
+                        if (result.status === 'success') {
+                            resultDiv.innerHTML += '<p style="color: green;"><strong>✅ SUCCESS: Contact created!</strong></p>';
+                        } else {
+                            resultDiv.innerHTML += '<p style="color: orange;"><strong>⚠️ API responded but with error</strong></p>';
+                        }
+                    } catch (parseError) {
+                        resultDiv.innerHTML += '<p style="color: red;"><strong>❌ Invalid JSON response</strong></p>';
+                    }
+                } else {
+                    resultDiv.innerHTML += '<p style="color: red;"><strong>❌ HTTP Error</strong></p>';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <p style="color: red;"><strong>${error.message}</strong></p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
