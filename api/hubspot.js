@@ -47,20 +47,31 @@ export default async function handler(req, res) {
         if (leadData.First_Name) hubspotProperties.firstname = leadData.First_Name;
         if (leadData.Last_Name) hubspotProperties.lastname = leadData.Last_Name;
         if (leadData.Phone) hubspotProperties.phone = leadData.Phone;
-        // Skip description for now - will add to a custom field later if needed
-        // if (leadData.Description) hubspotProperties.hs_content_membership_notes = leadData.Description;
+        if (leadData.Description) hubspotProperties.notes_last_contacted = leadData.Description;
         if (leadData.Lead_Source) {
             hubspotProperties.hs_lead_status = 'NEW';
-            // Map lead sources to valid HubSpot options
+            hubspotProperties.lead_source = 'Music Website';
+            // Map lead sources to valid HubSpot options  
             const sourceMapping = {
                 'API Test': 'OTHER_CAMPAIGNS',
-                'Website Newsletter': 'DIRECT_TRAFFIC',
-                'Website Contact': 'DIRECT_TRAFFIC',
+                'Website Newsletter': 'DIRECT_TRAFFIC', 
+                'Website Contact Form': 'DIRECT_TRAFFIC',
                 'Contact Form': 'DIRECT_TRAFFIC'
             };
             hubspotProperties.hs_analytics_source = sourceMapping[leadData.Lead_Source] || 'DIRECT_TRAFFIC';
         }
-        if (leadData.Industry) hubspotProperties.jobtitle = leadData.Industry;
+        if (leadData.Industry) {
+            // Map inquiry types to more descriptive values
+            const inquiryMapping = {
+                'artist': 'Artist Inquiry',
+                'booking': 'Booking Request', 
+                'fan': 'Fan Message',
+                'collab': 'Collaboration Idea',
+                'inquiry': 'Other Inquiry',
+                'other': 'Other'
+            };
+            hubspotProperties.industry = inquiryMapping[leadData.Industry] || leadData.Industry;
+        }
         
         // Create contact in HubSpot
         const response = await fetch('https://api.hubapi.com/crm/v3/objects/contacts', {
