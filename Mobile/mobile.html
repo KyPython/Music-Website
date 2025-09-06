@@ -338,7 +338,7 @@
             const description = formId === 'newsletter-form' ? 'Subscribed to newsletter from main form' : 'Subscribed to newsletter from footer form';
 
             try {
-                const response = await fetch('./api.php', {
+                const response = await fetch('/api/hubspot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -382,7 +382,7 @@
             }
 
             try {
-                const response = await fetch('./api.php', {
+                const response = await fetch('/api/hubspot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

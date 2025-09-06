@@ -17,9 +17,9 @@
             resultDiv.innerHTML = 'Testing API...';
             
             try {
-                console.log('Testing API at: ./api.php');
+                console.log('Testing API at: /api/hubspot');
                 
-                const response = await fetch('./api.php', {
+                const response = await fetch('/api/hubspot', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

@@ -316,7 +316,7 @@
                     const email = document.getElementById('newsletter-email').value;
                     
                     try {
-                        const response = await fetch('./api.php', {
+                        const response = await fetch('/api/hubspot', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -361,7 +361,7 @@
                     const email = document.getElementById('footer-email').value;
                     
                     try {
-                        const response = await fetch('./api.php', {
+                        const response = await fetch('/api/hubspot', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -422,7 +422,7 @@
                     }
                     
                     try {
-                        const response = await fetch('./api.php', {
+                        const response = await fetch('/api/hubspot', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
